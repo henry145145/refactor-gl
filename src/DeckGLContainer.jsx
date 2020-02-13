@@ -91,6 +91,7 @@ export default class DeckGLContainer extends React.Component {
   render() {
     const { children, bottomMargin, height, width } = this.props;
     const { viewState } = this.state;
+    console.log(viewState);
     const adjustedHeight = height - bottomMargin;
 
     const layers = this.layers();
@@ -99,7 +100,7 @@ export default class DeckGLContainer extends React.Component {
       <div style={{ position: 'relative', width, height: adjustedHeight }}>
         <DeckGL
           initWebGLParameters
-          controller
+          controller={true}
           width={width}
           height={adjustedHeight}
           layers={layers}
@@ -111,7 +112,7 @@ export default class DeckGLContainer extends React.Component {
             mapboxApiAccessToken={this.props.mapboxApiAccessToken}
           />
         </DeckGL>
-        {children}
+        {/*{children}*/}
       </div>
     );
   }

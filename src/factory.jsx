@@ -71,8 +71,6 @@ export function createDeckGLComponent(getLayer, getPoints) {
         differenceWith(oldFilter, newFilter, isEqual),
         differenceWith(newFilter, oldFilter, isEqual),
       ];
-      console.log(diff);
-      console.log(diff2);
       if (diff.length || diff2.length) {
         const originalViewport = nextProps.viewport;
         const viewport = nextProps.formData.autozoom

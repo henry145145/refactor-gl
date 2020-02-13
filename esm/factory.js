@@ -94,8 +94,6 @@ export function createDeckGLComponent(getLayer, getPoints) {
       var _ref2 = [differenceWith(oldFilter, newFilter, isEqual), differenceWith(newFilter, oldFilter, isEqual)],
           diff = _ref2[0],
           diff2 = _ref2[1];
-      console.log(diff);
-      console.log(diff2);
 
       if (diff.length || diff2.length) {
         var originalViewport = nextProps.viewport;
