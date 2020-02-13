@@ -91,11 +91,11 @@ export function createDeckGLComponent(getLayer, getPoints) {
       var _ref = [currFdNoVP.extra_filters, nextFdNoVP.extra_filters],
           oldFilter = _ref[0],
           newFilter = _ref[1];
-      console.log(oldFilter);
-      console.log(newFilter);
       var _ref2 = [differenceWith(oldFilter, newFilter, isEqual), differenceWith(newFilter, oldFilter, isEqual)],
           diff = _ref2[0],
           diff2 = _ref2[1];
+      console.log(diff);
+      console.log(diff2);
 
       if (diff.length || diff2.length) {
         var originalViewport = nextProps.viewport;
@@ -128,10 +128,11 @@ export function createDeckGLComponent(getLayer, getPoints) {
           setControlValue = _this$props.setControlValue,
           height = _this$props.height,
           width = _this$props.width;
-      console.log(formData);
       var _this$state = this.state,
           layer = _this$state.layer,
           viewport = _this$state.viewport;
+      console.log(formData.viewport);
+      console.log(viewport);
       return React.createElement(DeckGLContainer, {
         mapboxApiAccessToken: payload.data.mapboxApiKey,
         viewport: viewport,

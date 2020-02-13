@@ -67,12 +67,12 @@ export function createDeckGLComponent(getLayer, getPoints) {
         this.setState({ layer: this.computeLayer(nextProps) });
       }
       const [oldFilter, newFilter] = [currFdNoVP.extra_filters, nextFdNoVP.extra_filters];
-      console.log(oldFilter);
-      console.log(newFilter);
       const [diff, diff2] = [
         differenceWith(oldFilter, newFilter, isEqual),
         differenceWith(newFilter, oldFilter, isEqual),
       ];
+      console.log(diff);
+      console.log(diff2);
       if (diff.length || diff2.length) {
         const originalViewport = nextProps.viewport;
         const viewport = nextProps.formData.autozoom
@@ -95,8 +95,9 @@ export function createDeckGLComponent(getLayer, getPoints) {
 
     render() {
       const { formData, payload, setControlValue, height, width } = this.props;
-      console.log(formData);
       const { layer, viewport } = this.state;
+      console.log(formData.viewport);
+      console.log(viewport);
 
       return (
         <DeckGLContainer
