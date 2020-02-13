@@ -90,8 +90,8 @@ export default class DeckGLContainer extends React.Component {
 
   render() {
     const { children, bottomMargin, height, width } = this.props;
-    const { viewState } = this.props;
-    console.log(viewState);
+    const { viewport } = this.props;
+    console.log(viewport);
     const adjustedHeight = height - bottomMargin;
 
     const layers = this.layers();
@@ -104,7 +104,7 @@ export default class DeckGLContainer extends React.Component {
           width={width}
           height={adjustedHeight}
           layers={layers}
-          viewState={viewState}
+          viewState={viewport}
           onViewStateChange={this.onViewStateChange}
         >
           <StaticMap
@@ -112,7 +112,7 @@ export default class DeckGLContainer extends React.Component {
             mapboxApiAccessToken={this.props.mapboxApiAccessToken}
           />
         </DeckGL>
-        {/*{children}*/}
+        {children}
       </div>
     );
   }

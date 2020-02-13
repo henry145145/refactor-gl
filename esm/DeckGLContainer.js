@@ -126,8 +126,8 @@ function (_React$Component) {
         bottomMargin = _this$props.bottomMargin,
         height = _this$props.height,
         width = _this$props.width;
-    var viewState = this.props.viewState;
-    console.log(viewState);
+    var viewport = this.props.viewport;
+    console.log(viewport);
     var adjustedHeight = height - bottomMargin;
     var layers = this.layers();
     return React.createElement("div", {
@@ -142,12 +142,12 @@ function (_React$Component) {
       width: width,
       height: adjustedHeight,
       layers: layers,
-      viewState: viewState,
+      viewState: viewport,
       onViewStateChange: this.onViewStateChange
     }, React.createElement(StaticMap, {
       mapStyle: this.props.mapStyle,
       mapboxApiAccessToken: this.props.mapboxApiAccessToken
-    })));
+    })), children);
   };
 
   return DeckGLContainer;
