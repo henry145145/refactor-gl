@@ -84,6 +84,9 @@ function (_React$Component) {
 
   _proto.onViewStateChange = function onViewStateChange(_ref) {
     var viewState = _ref.viewState;
+    console.log({
+      viewState: viewState
+    });
     this.setState({
       viewState: viewState,
       lastUpdate: Date.now()
@@ -126,8 +129,8 @@ function (_React$Component) {
         bottomMargin = _this$props.bottomMargin,
         height = _this$props.height,
         width = _this$props.width;
-    var viewState = this.state.viewState;
-    var initialViewState = this.props.viewport; // const { viewport } = this.props;
+    var viewState = this.state.viewState; // const initialViewState = this.props.viewport;
+    // const { viewport } = this.props;
 
     console.log(viewState);
     var adjustedHeight = height - bottomMargin;
@@ -144,8 +147,8 @@ function (_React$Component) {
       width: width,
       height: adjustedHeight,
       layers: layers,
-      viewState: viewState,
-      initialViewState: initialViewState,
+      viewState: viewState // initialViewState={initialViewState}
+      ,
       onViewStateChange: this.onViewStateChange
     }, React.createElement(StaticMap, {
       mapStyle: this.props.mapStyle,

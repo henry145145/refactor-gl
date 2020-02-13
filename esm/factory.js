@@ -105,6 +105,7 @@ export function createDeckGLComponent(getLayer, getPoints) {
     };
 
     _proto.onViewportChange = function onViewportChange(viewport) {
+      console.log(viewport);
       this.setState({
         viewport: viewport
       });
