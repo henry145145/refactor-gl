@@ -90,9 +90,8 @@ export default class DeckGLContainer extends React.Component {
 
   render() {
     const { children, bottomMargin, height, width } = this.props;
-    const { viewState } = this.state;
-    console.log(this.state);
-    console.log(this.props);
+    const { viewState } = this.props;
+    console.log(viewState);
     const adjustedHeight = height - bottomMargin;
 
     const layers = this.layers();

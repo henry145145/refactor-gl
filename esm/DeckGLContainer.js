@@ -126,9 +126,8 @@ function (_React$Component) {
         bottomMargin = _this$props.bottomMargin,
         height = _this$props.height,
         width = _this$props.width;
-    var viewState = this.state.viewState;
-    console.log(this.state);
-    console.log(this.props);
+    var viewState = this.props.viewState;
+    console.log(viewState);
     var adjustedHeight = height - bottomMargin;
     var layers = this.layers();
     return React.createElement("div", {
