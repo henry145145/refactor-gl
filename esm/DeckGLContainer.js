@@ -126,8 +126,10 @@ function (_React$Component) {
         bottomMargin = _this$props.bottomMargin,
         height = _this$props.height,
         width = _this$props.width;
-    var viewport = this.props.viewport;
-    console.log(viewport);
+    var viewState = this.state.viewState;
+    var initialViewState = this.props.viewport; // const { viewport } = this.props;
+
+    console.log(viewState);
     var adjustedHeight = height - bottomMargin;
     var layers = this.layers();
     return React.createElement("div", {
@@ -142,7 +144,8 @@ function (_React$Component) {
       width: width,
       height: adjustedHeight,
       layers: layers,
-      viewState: viewport,
+      viewState: viewState,
+      initialViewState: initialViewState,
       onViewStateChange: this.onViewStateChange
     }, React.createElement(StaticMap, {
       mapStyle: this.props.mapStyle,
