@@ -67,6 +67,8 @@ export function createDeckGLComponent(getLayer, getPoints) {
         this.setState({ layer: this.computeLayer(nextProps) });
       }
       const [oldFilter, newFilter] = [currFdNoVP.extra_filters, nextFdNoVP.extra_filters];
+      console.log(oldFilter);
+      console.log(newFilter);
       const [diff, diff2] = [
         differenceWith(oldFilter, newFilter, isEqual),
         differenceWith(newFilter, oldFilter, isEqual),
@@ -93,6 +95,7 @@ export function createDeckGLComponent(getLayer, getPoints) {
 
     render() {
       const { formData, payload, setControlValue, height, width } = this.props;
+      console.log(formData);
       const { layer, viewport } = this.state;
 
       return (
