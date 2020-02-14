@@ -84,9 +84,6 @@ function (_React$Component) {
 
   _proto.onViewStateChange = function onViewStateChange(_ref) {
     var viewState = _ref.viewState;
-    console.log({
-      viewState: viewState
-    });
     this.setState({
       viewState: viewState,
       lastUpdate: Date.now()
@@ -124,15 +121,18 @@ function (_React$Component) {
   };
 
   _proto.render = function render() {
+    console.log({
+      stat: this.state
+    });
+    console.log({
+      prop: this.props
+    });
     var _this$props = this.props,
         children = _this$props.children,
         bottomMargin = _this$props.bottomMargin,
         height = _this$props.height,
         width = _this$props.width;
-    var viewState = this.state.viewState; // const initialViewState = this.props.viewport;
-    // const { viewport } = this.props;
-
-    console.log(viewState);
+    var viewState = this.state.viewState;
     var adjustedHeight = height - bottomMargin;
     var layers = this.layers();
     return React.createElement("div", {

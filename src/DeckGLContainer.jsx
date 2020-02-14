@@ -64,7 +64,6 @@ export default class DeckGLContainer extends React.Component {
   }
 
   onViewStateChange({ viewState }) {
-    console.log({viewState});
     this.setState({ viewState, lastUpdate: Date.now() });
   }
 
@@ -90,11 +89,10 @@ export default class DeckGLContainer extends React.Component {
   }
 
   render() {
+    console.log({ stat: this.state });
+    console.log({ prop: this.props });
     const { children, bottomMargin, height, width } = this.props;
     const { viewState } = this.state;
-    // const initialViewState = this.props.viewport;
-    // const { viewport } = this.props;
-    console.log(viewState);
     const adjustedHeight = height - bottomMargin;
 
     const layers = this.layers();
