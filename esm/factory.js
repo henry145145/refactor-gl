@@ -129,9 +129,6 @@ export function createDeckGLComponent(getLayer, getPoints) {
       var _this$state = this.state,
           layer = _this$state.layer,
           viewport = _this$state.viewport;
-      console.log({
-        hex: viewport
-      });
       return React.createElement(DeckGLContainer, {
         mapboxApiAccessToken: payload.data.mapboxApiKey,
         viewport: viewport,

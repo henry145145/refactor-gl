@@ -56,7 +56,7 @@ export default class DeckGLContainer extends React.Component {
     // This has to be placed after this.tick is bound to this
     this.state = {
       timer: setInterval(this.tick, TICK),
-      viewState: props.viewport,
+      viewState: this.props.viewport,
     };
   }
 
@@ -90,9 +90,11 @@ export default class DeckGLContainer extends React.Component {
   }
 
   render() {
+    console.log({prop: this.props});
     console.log({ stat: this.state });
     const { children, bottomMargin, height, width } = this.props;
     const { viewState } = this.state;
+    console.log({viewState});
     const adjustedHeight = height - bottomMargin;
 
     const layers = this.layers();

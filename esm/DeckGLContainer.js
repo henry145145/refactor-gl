@@ -72,7 +72,7 @@ function (_React$Component) {
 
     _this.state = {
       timer: setInterval(_this.tick, TICK),
-      viewState: props.viewport
+      viewState: _this.props.viewport
     };
     return _this;
   }
@@ -123,6 +123,9 @@ function (_React$Component) {
 
   _proto.render = function render() {
     console.log({
+      prop: this.props
+    });
+    console.log({
       stat: this.state
     });
     var _this$props = this.props,
@@ -131,6 +134,9 @@ function (_React$Component) {
         height = _this$props.height,
         width = _this$props.width;
     var viewState = this.state.viewState;
+    console.log({
+      viewState: viewState
+    });
     var adjustedHeight = height - bottomMargin;
     var layers = this.layers();
     return React.createElement("div", {
