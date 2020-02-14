@@ -65,8 +65,6 @@ export default class DeckGLContainer extends React.Component {
   }
 
   onViewStateChange({ viewState }) {
-    console.log('haha');
-    console.log(viewState);
     this.setState({ viewState, lastUpdate: Date.now() });
   }
 
@@ -83,7 +81,6 @@ export default class DeckGLContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps){
-    console.log(nextProps);
     const { viewport } = nextProps;
     this.setState({viewState: viewport});
   }
@@ -113,7 +110,6 @@ export default class DeckGLContainer extends React.Component {
           height={adjustedHeight}
           layers={layers}
           viewState={viewState}
-          // initialViewState={initialViewState}
           onViewStateChange={this.onViewStateChange}
         >
           <StaticMap
