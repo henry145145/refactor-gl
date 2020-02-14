@@ -82,6 +82,12 @@ export default class DeckGLContainer extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps){
+    console.log(nextProps);
+    const { viewport } = nextProps;
+    this.setState({viewState: viewport});
+  }
+
   layers() {
     // Support for layer factory
     if (this.props.layers.some(l => typeof l === 'function')) {
@@ -92,8 +98,6 @@ export default class DeckGLContainer extends React.Component {
   }
 
   render() {
-    console.log({ prop: this.props.viewport });
-    console.log({ stat: this.state.viewState });
     const { children, bottomMargin, height, width } = this.props;
     const { viewState } = this.state;
     const adjustedHeight = height - bottomMargin;

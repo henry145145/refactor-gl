@@ -110,6 +110,14 @@ function (_React$Component) {
     }
   };
 
+  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+    var viewport = nextProps.viewport;
+    this.setState({
+      viewState: viewport
+    });
+  };
+
   _proto.layers = function layers() {
     // Support for layer factory
     if (this.props.layers.some(function (l) {
@@ -124,12 +132,6 @@ function (_React$Component) {
   };
 
   _proto.render = function render() {
-    console.log({
-      prop: this.props.viewport
-    });
-    console.log({
-      stat: this.state.viewState
-    });
     var _this$props = this.props,
         children = _this$props.children,
         bottomMargin = _this$props.bottomMargin,
