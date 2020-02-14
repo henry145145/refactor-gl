@@ -43,6 +43,7 @@ var propTypes = {
   viewport: PropTypes.object.isRequired,
   layers: PropTypes.array.isRequired,
   setControlValue: PropTypes.func,
+  onViewportChange: PropTypes.func,
   mapStyle: PropTypes.string,
   mapboxApiAccessToken: PropTypes.string.isRequired,
   children: PropTypes.node,
@@ -123,9 +124,6 @@ function (_React$Component) {
   _proto.render = function render() {
     console.log({
       stat: this.state
-    });
-    console.log({
-      prop: this.props
     });
     var _this$props = this.props,
         children = _this$props.children,

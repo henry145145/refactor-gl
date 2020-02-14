@@ -81,7 +81,6 @@ export function createDeckGLComponent(getLayer, getPoints) {
     }
 
     onViewportChange(viewport) {
-      console.log(viewport);
       this.setState({ viewport });
     }
 
@@ -95,6 +94,7 @@ export function createDeckGLComponent(getLayer, getPoints) {
     render() {
       const { formData, payload, setControlValue, height, width } = this.props;
       const { layer, viewport } = this.state;
+      console.log({ hex: viewport });
       return (
         <DeckGLContainer
           mapboxApiAccessToken={payload.data.mapboxApiKey}

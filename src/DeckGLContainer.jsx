@@ -33,6 +33,7 @@ const propTypes = {
   viewport: PropTypes.object.isRequired,
   layers: PropTypes.array.isRequired,
   setControlValue: PropTypes.func,
+  onViewportChange: PropTypes.func,
   mapStyle: PropTypes.string,
   mapboxApiAccessToken: PropTypes.string.isRequired,
   children: PropTypes.node,
@@ -90,7 +91,6 @@ export default class DeckGLContainer extends React.Component {
 
   render() {
     console.log({ stat: this.state });
-    console.log({ prop: this.props });
     const { children, bottomMargin, height, width } = this.props;
     const { viewState } = this.state;
     const adjustedHeight = height - bottomMargin;
