@@ -53,9 +53,7 @@ var defaultProps = {
   position: 'tr'
 };
 
-var Legend =
-/*#__PURE__*/
-function (_React$PureComponent) {
+var Legend = /*#__PURE__*/function (_React$PureComponent) {
   _inheritsLoose(Legend, _React$PureComponent);
 
   function Legend() {

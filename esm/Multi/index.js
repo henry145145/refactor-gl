@@ -33,9 +33,7 @@ var metadata = new ChartMetadata({
   useLegacyApi: true
 });
 
-var MultiChartPlugin =
-/*#__PURE__*/
-function (_ChartPlugin) {
+var MultiChartPlugin = /*#__PURE__*/function (_ChartPlugin) {
   _inheritsLoose(MultiChartPlugin, _ChartPlugin);
 
   function MultiChartPlugin() {

@@ -29,9 +29,7 @@ import PolygonChartPlugin from './layers/Polygon';
 import ScatterChartPlugin from './layers/Scatter';
 import ScreengridChartPlugin from './layers/Screengrid';
 
-var DeckGLChartPreset =
-/*#__PURE__*/
-function (_Preset) {
+var DeckGLChartPreset = /*#__PURE__*/function (_Preset) {
   _inheritsLoose(DeckGLChartPreset, _Preset);
 
   function DeckGLChartPreset() {

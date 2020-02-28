@@ -58,9 +58,7 @@ var defaultProps = {
   onSelect: function onSelect() {}
 };
 
-var DeckMulti =
-/*#__PURE__*/
-function (_React$PureComponent) {
+var DeckMulti = /*#__PURE__*/function (_React$PureComponent) {
   _inheritsLoose(DeckMulti, _React$PureComponent);
 
   function DeckMulti(props) {

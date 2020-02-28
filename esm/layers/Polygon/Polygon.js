@@ -163,9 +163,7 @@ var defaultProps = {
   setTooltip: function setTooltip() {}
 };
 
-var DeckGLPolygon =
-/*#__PURE__*/
-function (_React$Component) {
+var DeckGLPolygon = /*#__PURE__*/function (_React$Component) {
   _inheritsLoose(DeckGLPolygon, _React$Component);
 
   function DeckGLPolygon(props) {

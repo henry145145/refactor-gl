@@ -33,9 +33,7 @@ var metadata = new ChartMetadata({
   useLegacyApi: true
 });
 
-var HexChartPlugin =
-/*#__PURE__*/
-function (_ChartPlugin) {
+var HexChartPlugin = /*#__PURE__*/function (_ChartPlugin) {
   _inheritsLoose(HexChartPlugin, _ChartPlugin);
 
   function HexChartPlugin() {

@@ -33,9 +33,7 @@ var metadata = new ChartMetadata({
   useLegacyApi: true
 });
 
-var GeojsonChartPlugin =
-/*#__PURE__*/
-function (_ChartPlugin) {
+var GeojsonChartPlugin = /*#__PURE__*/function (_ChartPlugin) {
   _inheritsLoose(GeojsonChartPlugin, _ChartPlugin);
 
   function GeojsonChartPlugin() {

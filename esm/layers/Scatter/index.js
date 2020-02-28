@@ -33,9 +33,7 @@ var metadata = new ChartMetadata({
   useLegacyApi: true
 });
 
-var ScatterChartPlugin =
-/*#__PURE__*/
-function (_ChartPlugin) {
+var ScatterChartPlugin = /*#__PURE__*/function (_ChartPlugin) {
   _inheritsLoose(ScatterChartPlugin, _ChartPlugin);
 
   function ScatterChartPlugin() {

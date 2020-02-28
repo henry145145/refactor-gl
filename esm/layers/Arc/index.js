@@ -33,9 +33,7 @@ var metadata = new ChartMetadata({
   useLegacyApi: true
 });
 
-var ArcChartPlugin =
-/*#__PURE__*/
-function (_ChartPlugin) {
+var ArcChartPlugin = /*#__PURE__*/function (_ChartPlugin) {
   _inheritsLoose(ArcChartPlugin, _ChartPlugin);
 
   function ArcChartPlugin() {

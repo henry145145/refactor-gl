@@ -33,9 +33,7 @@ var metadata = new ChartMetadata({
   useLegacyApi: true
 });
 
-var PathChartPlugin =
-/*#__PURE__*/
-function (_ChartPlugin) {
+var PathChartPlugin = /*#__PURE__*/function (_ChartPlugin) {
   _inheritsLoose(PathChartPlugin, _ChartPlugin);
 
   function PathChartPlugin() {

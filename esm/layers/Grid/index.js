@@ -33,9 +33,7 @@ var metadata = new ChartMetadata({
   useLegacyApi: true
 });
 
-var GridChartPlugin =
-/*#__PURE__*/
-function (_ChartPlugin) {
+var GridChartPlugin = /*#__PURE__*/function (_ChartPlugin) {
   _inheritsLoose(GridChartPlugin, _ChartPlugin);
 
   function GridChartPlugin() {

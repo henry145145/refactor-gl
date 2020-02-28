@@ -25,9 +25,7 @@ var propTypes = {
   value: PropTypes.string.isRequired
 };
 
-var TooltipRow =
-/*#__PURE__*/
-function (_React$PureComponent) {
+var TooltipRow = /*#__PURE__*/function (_React$PureComponent) {
   _inheritsLoose(TooltipRow, _React$PureComponent);
 
   function TooltipRow() {

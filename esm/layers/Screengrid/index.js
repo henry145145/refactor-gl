@@ -33,9 +33,7 @@ var metadata = new ChartMetadata({
   useLegacyApi: true
 });
 
-var ScreengridChartPlugin =
-/*#__PURE__*/
-function (_ChartPlugin) {
+var ScreengridChartPlugin = /*#__PURE__*/function (_ChartPlugin) {
   _inheritsLoose(ScreengridChartPlugin, _ChartPlugin);
 
   function ScreengridChartPlugin() {

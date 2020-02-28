@@ -52,9 +52,7 @@ var defaultProps = {
 };
 export function createDeckGLComponent(getLayer, getPoints) {
   // Higher order component
-  var Component =
-  /*#__PURE__*/
-  function (_React$PureComponent) {
+  var Component = /*#__PURE__*/function (_React$PureComponent) {
     _inheritsLoose(Component, _React$PureComponent);
 
     function Component(props) {

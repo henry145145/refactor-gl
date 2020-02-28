@@ -116,9 +116,7 @@ var defaultProps = {
   setTooltip: function setTooltip() {}
 };
 
-var DeckGLScreenGrid =
-/*#__PURE__*/
-function (_React$PureComponent) {
+var DeckGLScreenGrid = /*#__PURE__*/function (_React$PureComponent) {
   _inheritsLoose(DeckGLScreenGrid, _React$PureComponent);
 
   function DeckGLScreenGrid(props) {

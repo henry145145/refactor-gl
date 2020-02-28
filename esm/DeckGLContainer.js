@@ -58,9 +58,7 @@ var defaultProps = {
   bottomMargin: 0
 };
 
-var DeckGLContainer =
-/*#__PURE__*/
-function (_React$Component) {
+var DeckGLContainer = /*#__PURE__*/function (_React$Component) {
   _inheritsLoose(DeckGLContainer, _React$Component);
 
   function DeckGLContainer(props) {
@@ -137,6 +135,7 @@ function (_React$Component) {
     var viewState = this.state.viewState;
     var adjustedHeight = height - bottomMargin;
     var layers = this.layers();
+    console.log(layers);
     return React.createElement("div", {
       style: {
         position: 'relative',

@@ -33,9 +33,7 @@ var metadata = new ChartMetadata({
   useLegacyApi: true
 });
 
-var PolygonChartPlugin =
-/*#__PURE__*/
-function (_ChartPlugin) {
+var PolygonChartPlugin = /*#__PURE__*/function (_ChartPlugin) {
   _inheritsLoose(PolygonChartPlugin, _ChartPlugin);
 
   function PolygonChartPlugin() {
