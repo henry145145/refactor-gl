@@ -93,12 +93,14 @@ class DeckMulti extends React.PureComponent {
       subSlicesLayers: {},
       viewport
     });
+    console.log(formData);
+    console.log(payload.data);
     payload.data.slices.forEach(subslice => {
       // Filters applied to multi_deck are passed down to underlying charts
       // note that dashboard contextual information (filter_immune_slices and such) aren't
       // taken into consideration here
+      console.log(subslice);
       const filters = [...(subslice.form_data.filters || []), ...(formData.filters || []), ...(formData.extra_filters || [])];
-      console.log(filters);
 
       const subsliceCopy = _extends({}, subslice, {
         form_data: _extends({}, subslice.form_data, {

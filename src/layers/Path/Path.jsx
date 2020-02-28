@@ -56,8 +56,6 @@ export function getLayer(formData, payload, onAddFilter, setTooltip) {
     data = jsFnMutator(data);
   }
 
-  console.log(onAddFilter);
-
   return new PathLayer({
     id: `path-layer-${fd.slice_id}`,
     getColor: d => d.color,
