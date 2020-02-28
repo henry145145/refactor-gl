@@ -119,7 +119,7 @@ export function createDeckGLComponent(getLayer, getPoints) {
         layer,
         viewport
       } = this.state;
-      console.log(formData);
+      console.log(layer);
       return React.createElement(DeckGLContainer, {
         mapboxApiAccessToken: payload.data.mapboxApiKey,
         viewport: viewport,

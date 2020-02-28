@@ -92,14 +92,11 @@ class DeckMulti extends React.PureComponent {
     this.setState({
       subSlicesLayers: {},
       viewport
-    }); // console.log(formData);
-    // console.log(payload.data);
-
+    });
     payload.data.slices.forEach(subslice => {
       // Filters applied to multi_deck are passed down to underlying charts
       // note that dashboard contextual information (filter_immune_slices and such) aren't
       // taken into consideration here
-      // console.log(subslice);
       const filters = [...(subslice.form_data.filters || []), ...(formData.filters || []), ...(formData.extra_filters || [])];
 
       const subsliceCopy = _extends({}, subslice, {
@@ -114,7 +111,6 @@ class DeckMulti extends React.PureComponent {
       }).then(({
         json
       }) => {
-        console.log(subsliceCopy.form_data);
         const layer = layerGenerators[subsliceCopy.form_data.viz_type](subsliceCopy.form_data, json, this.props.onAddFilter, this.props.setTooltip, [], this.props.onSelect);
         this.setState({
           subSlicesLayers: _extends({}, this.state.subSlicesLayers, {
@@ -134,8 +130,8 @@ class DeckMulti extends React.PureComponent {
     const {
       subSlicesLayers
     } = this.state;
-    console.log(formData);
     const layers = Object.values(subSlicesLayers);
+    console.log(layers);
     return React.createElement(DeckGLContainer, {
       mapboxApiAccessToken: payload.data.mapboxApiKey,
       viewport: this.state.viewport || this.props.viewport,
