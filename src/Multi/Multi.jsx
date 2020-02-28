@@ -80,6 +80,7 @@ class DeckMulti extends React.PureComponent {
         ...(formData.filters || []),
         ...(formData.extra_filters || []),
       ];
+      console.log(filters);
       const subsliceCopy = {
         ...subslice,
         form_data: {

@@ -98,6 +98,7 @@ class DeckMulti extends React.PureComponent {
       // note that dashboard contextual information (filter_immune_slices and such) aren't
       // taken into consideration here
       const filters = [...(subslice.form_data.filters || []), ...(formData.filters || []), ...(formData.extra_filters || [])];
+      console.log(filters);
 
       const subsliceCopy = _extends({}, subslice, {
         form_data: _extends({}, subslice.form_data, {

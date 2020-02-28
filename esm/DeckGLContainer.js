@@ -124,7 +124,6 @@ export default class DeckGLContainer extends React.Component {
     } = this.state;
     const adjustedHeight = height - bottomMargin;
     const layers = this.layers();
-    console.log(layers);
     return React.createElement("div", {
       style: {
         position: 'relative',
