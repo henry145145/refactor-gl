@@ -72,9 +72,6 @@ export function createDeckGLComponent(getLayer, getPoints) {
         viewport: null
       });
 
-      console.log(nextFdNoVP);
-      console.log(currFdNoVP);
-
       if (!isEqual(nextFdNoVP, currFdNoVP) || nextProps.payload !== this.props.payload) {
         this.setState({
           layer: this.computeLayer(nextProps)
@@ -122,6 +119,7 @@ export function createDeckGLComponent(getLayer, getPoints) {
         layer,
         viewport
       } = this.state;
+      console.log(formData);
       return React.createElement(DeckGLContainer, {
         mapboxApiAccessToken: payload.data.mapboxApiKey,
         viewport: viewport,

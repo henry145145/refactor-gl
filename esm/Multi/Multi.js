@@ -132,6 +132,7 @@ class DeckMulti extends React.PureComponent {
     const {
       subSlicesLayers
     } = this.state;
+    console.log(formData);
     const layers = Object.values(subSlicesLayers);
     return React.createElement(DeckGLContainer, {
       mapboxApiAccessToken: payload.data.mapboxApiKey,

@@ -117,6 +117,7 @@ class DeckMulti extends React.PureComponent {
   render() {
     const { payload, formData, setControlValue } = this.props;
     const { subSlicesLayers } = this.state;
+    console.log(formData);
 
     const layers = Object.values(subSlicesLayers);
 
