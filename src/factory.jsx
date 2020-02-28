@@ -63,6 +63,8 @@ export function createDeckGLComponent(getLayer, getPoints) {
       // Only recompute the layer if anything BUT the viewport has changed
       const nextFdNoVP = { ...nextProps.formData, viewport: null };
       const currFdNoVP = { ...this.props.formData, viewport: null };
+      console.log(nextFdNoVP);
+      console.log(currFdNoVP);
       if (!isEqual(nextFdNoVP, currFdNoVP) || nextProps.payload !== this.props.payload) {
         this.setState({ layer: this.computeLayer(nextProps) });
       }

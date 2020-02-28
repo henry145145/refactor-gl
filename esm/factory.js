@@ -72,6 +72,9 @@ export function createDeckGLComponent(getLayer, getPoints) {
         viewport: null
       });
 
+      console.log(nextFdNoVP);
+      console.log(currFdNoVP);
+
       if (!isEqual(nextFdNoVP, currFdNoVP) || nextProps.payload !== this.props.payload) {
         this.setState({
           layer: this.computeLayer(nextProps)
