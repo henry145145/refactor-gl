@@ -28,7 +28,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEqual } from 'lodash';
+import { isEqual, differenceWith } from 'lodash';
 import DeckGLContainer from './DeckGLContainer';
 import CategoricalDeckGLContainer from './CategoricalDeckGLContainer';
 import { fitViewport } from './layers/common';
@@ -75,6 +75,17 @@ export function createDeckGLComponent(getLayer, getPoints) {
       if (!isEqual(nextFdNoVP, currFdNoVP) || nextProps.payload !== this.props.payload) {
         this.setState({
           layer: this.computeLayer(nextProps)
+        });
+      }
+
+      const [oldFilter, newFilter] = [currFdNoVP.extra_filters, nextFdNoVP.extra_filters];
+      const [diff, diff2] = [differenceWith(oldFilter, newFilter, isEqual), differenceWith(newFilter, oldFilter, isEqual)];
+
+      if (diff.length || diff2.length) {
+        const originalViewport = nextProps.viewport;
+        const viewport = nextProps.formData.autozoom ? fitViewport(originalViewport, getPoints(nextProps.payload.data.features)) : originalViewport;
+        this.setState({
+          viewport
         });
       }
     }

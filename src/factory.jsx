@@ -22,7 +22,7 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEqual } from 'lodash';
+import { isEqual, differenceWith } from 'lodash';
 
 import DeckGLContainer from './DeckGLContainer';
 import CategoricalDeckGLContainer from './CategoricalDeckGLContainer';
@@ -66,6 +66,18 @@ export function createDeckGLComponent(getLayer, getPoints) {
       if (!isEqual(nextFdNoVP, currFdNoVP) || nextProps.payload !== this.props.payload) {
         this.setState({ layer: this.computeLayer(nextProps) });
       }
+      const [oldFilter, newFilter] = [currFdNoVP.extra_filters, nextFdNoVP.extra_filters];
+      const [diff, diff2] = [
+        differenceWith(oldFilter, newFilter, isEqual),
+        differenceWith(newFilter, oldFilter, isEqual),
+      ];
+      if (diff.length || diff2.length) {
+        const originalViewport = nextProps.viewport;
+        const viewport = nextProps.formData.autozoom
+          ? fitViewport(originalViewport, getPoints(nextProps.payload.data.features))
+          : originalViewport;
+        this.setState({ viewport });
+      }
     }
 
     onViewportChange(viewport) {
@@ -82,7 +94,6 @@ export function createDeckGLComponent(getLayer, getPoints) {
     render() {
       const { formData, payload, setControlValue, height, width } = this.props;
       const { layer, viewport } = this.state;
-
       return (
         <DeckGLContainer
           mapboxApiAccessToken={payload.data.mapboxApiKey}
