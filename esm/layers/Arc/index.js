@@ -1,8 +1,3 @@
-import "core-js/modules/es.object.to-string";
-import "core-js/modules/es.promise";
-
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
-
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,28 +20,20 @@ import { t } from '@superset-ui/translation';
 import { ChartMetadata, ChartPlugin } from '@superset-ui/chart';
 import thumbnail from './images/thumbnail.png';
 import transformProps from '../../transformProps';
-var metadata = new ChartMetadata({
+const metadata = new ChartMetadata({
   credits: ['https://uber.github.io/deck.gl'],
   description: '',
   name: t('deck.gl Arc'),
-  thumbnail: thumbnail,
+  thumbnail,
   useLegacyApi: true
 });
-
-var ArcChartPlugin = /*#__PURE__*/function (_ChartPlugin) {
-  _inheritsLoose(ArcChartPlugin, _ChartPlugin);
-
-  function ArcChartPlugin() {
-    return _ChartPlugin.call(this, {
-      loadChart: function loadChart() {
-        return import('./Arc');
-      },
-      metadata: metadata,
-      transformProps: transformProps
-    }) || this;
+export default class ArcChartPlugin extends ChartPlugin {
+  constructor() {
+    super({
+      loadChart: () => import('./Arc'),
+      metadata,
+      transformProps
+    });
   }
 
-  return ArcChartPlugin;
-}(ChartPlugin);
-
-export { ArcChartPlugin as default };
+}

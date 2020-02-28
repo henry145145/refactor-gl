@@ -20,11 +20,11 @@
 /* eslint camelcase: 0 */
 // eslint-disable-next-line import/prefer-default-export
 export function roundDecimal(number, precision) {
-  var roundedNumber;
+  let roundedNumber;
 
   if (precision) {
     // eslint-disable-next-line no-param-reassign
-    roundedNumber = Math.round(number * (precision = Math.pow(10, precision))) / precision;
+    roundedNumber = Math.round(number * (precision = 10 ** precision)) / precision;
   } else {
     roundedNumber = Math.round(number);
   }

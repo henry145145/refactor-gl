@@ -1,7 +1,4 @@
-import "core-js/modules/es.array.for-each";
-import "core-js/modules/es.object.assign";
-import "core-js/modules/es.object.keys";
-import "core-js/modules/web.dom-collections.for-each";
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -29,20 +26,22 @@ import * as colors from './colors'; // Objects exposed here should be treated li
 // if `underscore` had backwards incompatible changes in a future release, we'd
 // have to be careful about bumping the library as those changes could break user charts
 
-var GLOBAL_CONTEXT = {
-  console: console,
-  _: _,
-  colors: colors,
-  d3array: d3array
+const GLOBAL_CONTEXT = {
+  console,
+  _,
+  colors,
+  d3array
 }; // Copied/modified from https://github.com/hacksparrow/safe-eval/blob/master/index.js
 
 export default function sandboxedEval(code, context, opts) {
-  var sandbox = {};
-  var resultKey = "SAFE_EVAL_" + Math.floor(Math.random() * 1000000);
+  const sandbox = {};
+  const resultKey = "SAFE_EVAL_" + Math.floor(Math.random() * 1000000);
   sandbox[resultKey] = {};
-  var codeToEval = resultKey + "=" + code;
-  var sandboxContext = Object.assign({}, GLOBAL_CONTEXT, {}, context);
-  Object.keys(sandboxContext).forEach(function (key) {
+  const codeToEval = resultKey + "=" + code;
+
+  const sandboxContext = _extends({}, GLOBAL_CONTEXT, {}, context);
+
+  Object.keys(sandboxContext).forEach(key => {
     sandbox[key] = sandboxContext[key];
   });
 
@@ -50,8 +49,6 @@ export default function sandboxedEval(code, context, opts) {
     vm.runInNewContext(codeToEval, sandbox, opts);
     return sandbox[resultKey];
   } catch (error) {
-    return function () {
-      return error;
-    };
+    return () => error;
   }
 }

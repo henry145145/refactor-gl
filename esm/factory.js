@@ -1,8 +1,4 @@
-import "core-js/modules/es.object.assign";
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /* eslint-disable react/sort-prop-types */
 
@@ -32,11 +28,11 @@ function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.crea
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEqual, differenceWith } from 'lodash';
+import { isEqual } from 'lodash';
 import DeckGLContainer from './DeckGLContainer';
 import CategoricalDeckGLContainer from './CategoricalDeckGLContainer';
 import { fitViewport } from './layers/common';
-var propTypes = {
+const propTypes = {
   formData: PropTypes.object.isRequired,
   payload: PropTypes.object.isRequired,
   setControlValue: PropTypes.func.isRequired,
@@ -46,37 +42,33 @@ var propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired
 };
-var defaultProps = {
-  onAddFilter: function onAddFilter() {},
-  setTooltip: function setTooltip() {}
+const defaultProps = {
+  onAddFilter() {},
+
+  setTooltip() {}
+
 };
 export function createDeckGLComponent(getLayer, getPoints) {
   // Higher order component
-  var Component = /*#__PURE__*/function (_React$PureComponent) {
-    _inheritsLoose(Component, _React$PureComponent);
-
-    function Component(props) {
-      var _this;
-
-      _this = _React$PureComponent.call(this, props) || this;
-      var originalViewport = props.viewport;
-      var viewport = props.formData.autozoom ? fitViewport(originalViewport, getPoints(props.payload.data.features)) : originalViewport;
-      _this.state = {
-        viewport: viewport,
-        layer: _this.computeLayer(props)
+  class Component extends React.PureComponent {
+    constructor(props) {
+      super(props);
+      const originalViewport = props.viewport;
+      const viewport = props.formData.autozoom ? fitViewport(originalViewport, getPoints(props.payload.data.features)) : originalViewport;
+      this.state = {
+        viewport,
+        layer: this.computeLayer(props)
       };
-      _this.onViewportChange = _this.onViewportChange.bind(_assertThisInitialized(_this));
-      return _this;
+      this.onViewportChange = this.onViewportChange.bind(this);
     }
 
-    var _proto = Component.prototype;
-
-    _proto.UNSAFE_componentWillReceiveProps = function UNSAFE_componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
       // Only recompute the layer if anything BUT the viewport has changed
-      var nextFdNoVP = Object.assign({}, nextProps.formData, {
+      const nextFdNoVP = _extends({}, nextProps.formData, {
         viewport: null
       });
-      var currFdNoVP = Object.assign({}, this.props.formData, {
+
+      const currFdNoVP = _extends({}, this.props.formData, {
         viewport: null
       });
 
@@ -85,48 +77,37 @@ export function createDeckGLComponent(getLayer, getPoints) {
           layer: this.computeLayer(nextProps)
         });
       }
+    }
 
-      var _ref = [currFdNoVP.extra_filters, nextFdNoVP.extra_filters],
-          oldFilter = _ref[0],
-          newFilter = _ref[1];
-      var _ref2 = [differenceWith(oldFilter, newFilter, isEqual), differenceWith(newFilter, oldFilter, isEqual)],
-          diff = _ref2[0],
-          diff2 = _ref2[1];
-
-      if (diff.length || diff2.length) {
-        var originalViewport = nextProps.viewport;
-        var viewport = nextProps.formData.autozoom ? fitViewport(originalViewport, getPoints(nextProps.payload.data.features)) : originalViewport;
-        this.setState({
-          viewport: viewport
-        });
-      }
-    };
-
-    _proto.onViewportChange = function onViewportChange(viewport) {
+    onViewportChange(viewport) {
       this.setState({
-        viewport: viewport
+        viewport
       });
     } // eslint-disable-next-line class-methods-use-this
-    ;
 
-    _proto.computeLayer = function computeLayer(props) {
-      var formData = props.formData,
-          payload = props.payload,
-          onAddFilter = props.onAddFilter,
-          setTooltip = props.setTooltip;
+
+    computeLayer(props) {
+      const {
+        formData,
+        payload,
+        onAddFilter,
+        setTooltip
+      } = props;
       return getLayer(formData, payload, onAddFilter, setTooltip);
-    };
+    }
 
-    _proto.render = function render() {
-      var _this$props = this.props,
-          formData = _this$props.formData,
-          payload = _this$props.payload,
-          setControlValue = _this$props.setControlValue,
-          height = _this$props.height,
-          width = _this$props.width;
-      var _this$state = this.state,
-          layer = _this$state.layer,
-          viewport = _this$state.viewport;
+    render() {
+      const {
+        formData,
+        payload,
+        setControlValue,
+        height,
+        width
+      } = this.props;
+      const {
+        layer,
+        viewport
+      } = this.state;
       return React.createElement(DeckGLContainer, {
         mapboxApiAccessToken: payload.data.mapboxApiKey,
         viewport: viewport,
@@ -137,10 +118,9 @@ export function createDeckGLComponent(getLayer, getPoints) {
         height: height,
         onViewportChange: this.onViewportChange
       });
-    };
+    }
 
-    return Component;
-  }(React.PureComponent);
+  }
 
   Component.propTypes = propTypes;
   Component.defaultProps = defaultProps;
@@ -148,13 +128,15 @@ export function createDeckGLComponent(getLayer, getPoints) {
 }
 export function createCategoricalDeckGLComponent(getLayer, getPoints) {
   function Component(props) {
-    var formData = props.formData,
-        payload = props.payload,
-        setControlValue = props.setControlValue,
-        setTooltip = props.setTooltip,
-        viewport = props.viewport,
-        width = props.width,
-        height = props.height;
+    const {
+      formData,
+      payload,
+      setControlValue,
+      setTooltip,
+      viewport,
+      width,
+      height
+    } = props;
     return React.createElement(CategoricalDeckGLContainer, {
       formData: formData,
       mapboxApiKey: payload.data.mapboxApiKey,

@@ -1,9 +1,3 @@
-import "core-js/modules/es.array.iterator";
-import "core-js/modules/es.object.to-string";
-import "core-js/modules/es.set";
-import "core-js/modules/es.string.iterator";
-import "core-js/modules/web.dom-collections.iterator";
-
 /* eslint-disable consistent-return */
 
 /**
@@ -33,8 +27,8 @@ import "core-js/modules/web.dom-collections.iterator";
  */
 // eslint-disable-next-line import/prefer-default-export
 export function safeStringify(object) {
-  var cache = new Set();
-  return JSON.stringify(object, function (key, value) {
+  const cache = new Set();
+  return JSON.stringify(object, (key, value) => {
     if (typeof value === 'object' && value !== null) {
       if (cache.has(value)) {
         // We've seen this object before

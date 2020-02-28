@@ -1,15 +1,4 @@
-import "core-js/modules/es.array.filter";
-import "core-js/modules/es.array.for-each";
-import "core-js/modules/es.array.iterator";
-import "core-js/modules/es.array.map";
-import "core-js/modules/es.object.assign";
-import "core-js/modules/es.object.to-string";
-import "core-js/modules/web.dom-collections.for-each";
-import "core-js/modules/web.dom-collections.iterator";
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /* eslint-disable react/sort-prop-types */
 
@@ -46,9 +35,7 @@ import { commonLayerProps, fitViewport } from '../common';
 import TooltipRow from '../../TooltipRow';
 
 function getPoints(data) {
-  return data.map(function (d) {
-    return d.position;
-  });
+  return data.map(d => d.position);
 }
 
 function setTooltipContent(o) {
@@ -64,44 +51,38 @@ function setTooltipContent(o) {
 }
 
 export function getLayer(formData, payload, onAddFilter, setTooltip, selected, onSelect, filters) {
-  var fd = formData;
-  var c = fd.color_picker;
-  var data = payload.data.features.map(function (d) {
-    return Object.assign({}, d, {
-      color: [c.r, c.g, c.b, 255 * c.a]
-    });
-  });
+  const fd = formData;
+  const c = fd.color_picker;
+  let data = payload.data.features.map(d => _extends({}, d, {
+    color: [c.r, c.g, c.b, 255 * c.a]
+  }));
 
   if (fd.js_data_mutator) {
     // Applying user defined data mutator if defined
-    var jsFnMutator = sandboxedEval(fd.js_data_mutator);
+    const jsFnMutator = sandboxedEval(fd.js_data_mutator);
     data = jsFnMutator(data);
   }
 
   if (filters != null) {
-    filters.forEach(function (f) {
-      data = data.filter(function (x) {
-        return f(x);
-      });
+    filters.forEach(f => {
+      data = data.filter(x => f(x));
     });
   } // Passing a layer creator function instead of a layer since the
   // layer needs to be regenerated at each render
 
 
-  return new ScreenGridLayer(Object.assign({
+  return new ScreenGridLayer(_extends({
     id: "screengrid-layer-" + fd.slice_id,
-    data: data,
+    data,
     pickable: true,
     cellSizePixels: fd.grid_size,
     minColor: [c.r, c.g, c.b, 0],
     maxColor: [c.r, c.g, c.b, 255 * c.a],
     outline: false,
-    getWeight: function getWeight(d) {
-      return d.weight || 0;
-    }
+    getWeight: d => d.weight || 0
   }, commonLayerProps(fd, setTooltip, setTooltipContent)));
 }
-var propTypes = {
+const propTypes = {
   formData: PropTypes.object.isRequired,
   payload: PropTypes.object.isRequired,
   setControlValue: PropTypes.func.isRequired,
@@ -111,25 +92,22 @@ var propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired
 };
-var defaultProps = {
-  onAddFilter: function onAddFilter() {},
-  setTooltip: function setTooltip() {}
+const defaultProps = {
+  onAddFilter() {},
+
+  setTooltip() {}
+
 };
 
-var DeckGLScreenGrid = /*#__PURE__*/function (_React$PureComponent) {
-  _inheritsLoose(DeckGLScreenGrid, _React$PureComponent);
-
-  function DeckGLScreenGrid(props) {
-    var _this;
-
-    _this = _React$PureComponent.call(this, props) || this;
-    _this.state = DeckGLScreenGrid.getDerivedStateFromProps(props);
-    _this.getLayers = _this.getLayers.bind(_assertThisInitialized(_this));
-    _this.onValuesChange = _this.onValuesChange.bind(_assertThisInitialized(_this));
-    return _this;
+class DeckGLScreenGrid extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = DeckGLScreenGrid.getDerivedStateFromProps(props);
+    this.getLayers = this.getLayers.bind(this);
+    this.onValuesChange = this.onValuesChange.bind(this);
   }
 
-  DeckGLScreenGrid.getDerivedStateFromProps = function getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props, state) {
     // the state is computed only from the payload; if it hasn't changed, do
     // not recompute state since this would reset selections and/or the play
     // slider position due to changes in form controls
@@ -137,66 +115,58 @@ var DeckGLScreenGrid = /*#__PURE__*/function (_React$PureComponent) {
       return null;
     }
 
-    var features = props.payload.data.features || [];
-    var timestamps = features.map(function (f) {
-      return f.__timestamp;
-    }); // the granularity has to be read from the payload form_data, not the
+    const features = props.payload.data.features || [];
+    const timestamps = features.map(f => f.__timestamp); // the granularity has to be read from the payload form_data, not the
     // props formData which comes from the instantaneous controls state
 
-    var granularity = props.payload.form_data.time_grain_sqla || props.payload.form_data.granularity || 'P1D';
-
-    var _getPlaySliderParams = getPlaySliderParams(timestamps, granularity),
-        start = _getPlaySliderParams.start,
-        end = _getPlaySliderParams.end,
-        getStep = _getPlaySliderParams.getStep,
-        values = _getPlaySliderParams.values,
-        disabled = _getPlaySliderParams.disabled;
-
-    var viewport = props.formData.autozoom ? fitViewport(props.viewport, getPoints(features)) : props.viewport;
+    const granularity = props.payload.form_data.time_grain_sqla || props.payload.form_data.granularity || 'P1D';
+    const {
+      start,
+      end,
+      getStep,
+      values,
+      disabled
+    } = getPlaySliderParams(timestamps, granularity);
+    const viewport = props.formData.autozoom ? fitViewport(props.viewport, getPoints(features)) : props.viewport;
     return {
-      start: start,
-      end: end,
-      getStep: getStep,
-      values: values,
-      disabled: disabled,
-      viewport: viewport,
+      start,
+      end,
+      getStep,
+      values,
+      disabled,
+      viewport,
       selected: [],
       lastClick: 0,
       formData: props.payload.form_data
     };
-  };
+  }
 
-  var _proto = DeckGLScreenGrid.prototype;
-
-  _proto.onValuesChange = function onValuesChange(values) {
+  onValuesChange(values) {
     this.setState({
       // eslint-disable-next-line react/no-access-state-in-setstate
       values: Array.isArray(values) ? values : [values, values + this.state.getStep(values)]
     });
-  };
+  }
 
-  _proto.getLayers = function getLayers(values) {
-    var filters = []; // time filter
+  getLayers(values) {
+    const filters = []; // time filter
 
     if (values[0] === values[1] || values[1] === this.end) {
-      filters.push(function (d) {
-        return d.__timestamp >= values[0] && d.__timestamp <= values[1];
-      });
+      filters.push(d => d.__timestamp >= values[0] && d.__timestamp <= values[1]);
     } else {
-      filters.push(function (d) {
-        return d.__timestamp >= values[0] && d.__timestamp < values[1];
-      });
+      filters.push(d => d.__timestamp >= values[0] && d.__timestamp < values[1]);
     }
 
-    var layer = getLayer(this.props.formData, this.props.payload, this.props.onAddFilter, this.props.setTooltip, filters);
+    const layer = getLayer(this.props.formData, this.props.payload, this.props.onAddFilter, this.props.setTooltip, filters);
     return [layer];
-  };
+  }
 
-  _proto.render = function render() {
-    var _this$props = this.props,
-        formData = _this$props.formData,
-        payload = _this$props.payload,
-        setControlValue = _this$props.setControlValue;
+  render() {
+    const {
+      formData,
+      payload,
+      setControlValue
+    } = this.props;
     return React.createElement("div", null, React.createElement(AnimatableDeckGLContainer, {
       aggregation: true,
       getLayers: this.getLayers,
@@ -214,10 +184,9 @@ var DeckGLScreenGrid = /*#__PURE__*/function (_React$PureComponent) {
       onValuesChange: this.onValuesChange,
       onViewportChange: this.onViewportChange
     }));
-  };
+  }
 
-  return DeckGLScreenGrid;
-}(React.PureComponent);
+}
 
 DeckGLScreenGrid.propTypes = propTypes;
 DeckGLScreenGrid.defaultProps = defaultProps;

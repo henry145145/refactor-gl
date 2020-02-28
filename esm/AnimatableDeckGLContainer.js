@@ -1,9 +1,3 @@
-import "core-js/modules/es.array.iterator";
-import "core-js/modules/es.object.to-string";
-import "core-js/modules/web.dom-collections.iterator";
-
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
-
 /* eslint-disable react/jsx-sort-default-props */
 
 /* eslint-disable react/sort-prop-types */
@@ -34,9 +28,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DeckGLContainer from './DeckGLContainer';
 import PlaySlider from './components/PlaySlider';
-var PLAYSLIDER_HEIGHT = 20; // px
+const PLAYSLIDER_HEIGHT = 20; // px
 
-var propTypes = {
+const propTypes = {
   getLayers: PropTypes.func.isRequired,
   start: PropTypes.number.isRequired,
   end: PropTypes.number.isRequired,
@@ -53,41 +47,33 @@ var propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired
 };
-var defaultProps = {
+const defaultProps = {
   aggregation: false,
   disabled: false,
   mapStyle: 'light',
-  setControlValue: function setControlValue() {},
-  onValuesChange: function onValuesChange() {}
+  setControlValue: () => {},
+  onValuesChange: () => {}
 };
-
-var AnimatableDeckGLContainer = /*#__PURE__*/function (_React$PureComponent) {
-  _inheritsLoose(AnimatableDeckGLContainer, _React$PureComponent);
-
-  function AnimatableDeckGLContainer() {
-    return _React$PureComponent.apply(this, arguments) || this;
-  }
-
-  var _proto = AnimatableDeckGLContainer.prototype;
-
-  _proto.render = function render() {
-    var _this$props = this.props,
-        start = _this$props.start,
-        end = _this$props.end,
-        getStep = _this$props.getStep,
-        disabled = _this$props.disabled,
-        aggregation = _this$props.aggregation,
-        children = _this$props.children,
-        getLayers = _this$props.getLayers,
-        values = _this$props.values,
-        onValuesChange = _this$props.onValuesChange,
-        viewport = _this$props.viewport,
-        setControlValue = _this$props.setControlValue,
-        mapStyle = _this$props.mapStyle,
-        mapboxApiAccessToken = _this$props.mapboxApiAccessToken,
-        height = _this$props.height,
-        width = _this$props.width;
-    var layers = getLayers(values);
+export default class AnimatableDeckGLContainer extends React.PureComponent {
+  render() {
+    const {
+      start,
+      end,
+      getStep,
+      disabled,
+      aggregation,
+      children,
+      getLayers,
+      values,
+      onValuesChange,
+      viewport,
+      setControlValue,
+      mapStyle,
+      mapboxApiAccessToken,
+      height,
+      width
+    } = this.props;
+    const layers = getLayers(values);
     return React.createElement("div", null, React.createElement(DeckGLContainer, {
       viewport: viewport,
       layers: layers,
@@ -105,11 +91,8 @@ var AnimatableDeckGLContainer = /*#__PURE__*/function (_React$PureComponent) {
       range: !aggregation,
       onChange: onValuesChange
     }), children);
-  };
+  }
 
-  return AnimatableDeckGLContainer;
-}(React.PureComponent);
-
-export { AnimatableDeckGLContainer as default };
+}
 AnimatableDeckGLContainer.propTypes = propTypes;
 AnimatableDeckGLContainer.defaultProps = defaultProps;

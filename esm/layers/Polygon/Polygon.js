@@ -1,22 +1,4 @@
-import "core-js/modules/es.array.concat";
-import "core-js/modules/es.array.filter";
-import "core-js/modules/es.array.flat-map";
-import "core-js/modules/es.array.for-each";
-import "core-js/modules/es.array.includes";
-import "core-js/modules/es.array.index-of";
-import "core-js/modules/es.array.iterator";
-import "core-js/modules/es.array.map";
-import "core-js/modules/es.array.splice";
-import "core-js/modules/es.array.unscopables.flat-map";
-import "core-js/modules/es.object.assign";
-import "core-js/modules/es.object.to-string";
-import "core-js/modules/es.string.includes";
-import "core-js/modules/web.dom-collections.for-each";
-import "core-js/modules/web.dom-collections.iterator";
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /* eslint-disable react/sort-prop-types */
 
@@ -54,12 +36,10 @@ import { getBuckets, getBreakPointColorScaler } from '../../utils';
 import { commonLayerProps, fitViewport } from '../common';
 import { getPlaySliderParams } from '../../utils/time';
 import sandboxedEval from '../../utils/sandbox';
-var DOUBLE_CLICK_TRESHOLD = 250; // milliseconds
+const DOUBLE_CLICK_TRESHOLD = 250; // milliseconds
 
 function getPoints(features) {
-  return features.flatMap(function (d) {
-    return d.polygon;
-  });
+  return features.flatMap(d => d.polygon);
 }
 
 function _getElevation(d, colorScaler) {
@@ -72,8 +52,8 @@ function _getElevation(d, colorScaler) {
 }
 
 function setTooltipContent(formData) {
-  return function (o) {
-    var metricLabel = formData.metric.label || formData.metric;
+  return o => {
+    const metricLabel = formData.metric.label || formData.metric;
     return React.createElement("div", {
       className: "deckgl-tooltip"
     }, React.createElement(TooltipRow, {
@@ -87,38 +67,32 @@ function setTooltipContent(formData) {
 }
 
 export function getLayer(formData, payload, onAddFilter, setTooltip, selected, onSelect, filters) {
-  var fd = formData;
-  var fc = fd.fill_color_picker;
-  var sc = fd.stroke_color_picker;
-  var data = [].concat(payload.data.features);
+  const fd = formData;
+  const fc = fd.fill_color_picker;
+  const sc = fd.stroke_color_picker;
+  let data = [...payload.data.features];
 
   if (filters != null) {
-    filters.forEach(function (f) {
-      data = data.filter(function (x) {
-        return f(x);
-      });
+    filters.forEach(f => {
+      data = data.filter(x => f(x));
     });
   }
 
   if (fd.js_data_mutator) {
     // Applying user defined data mutator if defined
-    var jsFnMutator = sandboxedEval(fd.js_data_mutator);
+    const jsFnMutator = sandboxedEval(fd.js_data_mutator);
     data = jsFnMutator(data);
   }
 
-  var metricLabel = fd.metric ? fd.metric.label || fd.metric : null;
+  const metricLabel = fd.metric ? fd.metric.label || fd.metric : null;
 
-  var accessor = function accessor(d) {
-    return d[metricLabel];
-  }; // base color for the polygons
+  const accessor = d => d[metricLabel]; // base color for the polygons
 
 
-  var baseColorScaler = fd.metric === null ? function () {
-    return [fc.r, fc.g, fc.b, 255 * fc.a];
-  } : getBreakPointColorScaler(fd, data, accessor); // when polygons are selected, reduce the opacity of non-selected polygons
+  const baseColorScaler = fd.metric === null ? () => [fc.r, fc.g, fc.b, 255 * fc.a] : getBreakPointColorScaler(fd, data, accessor); // when polygons are selected, reduce the opacity of non-selected polygons
 
-  var colorScaler = function colorScaler(d) {
-    var baseColor = baseColorScaler(d);
+  const colorScaler = d => {
+    const baseColor = baseColorScaler(d);
 
     if (selected.length > 0 && !selected.includes(d[fd.line_column])) {
       baseColor[3] /= 2;
@@ -127,28 +101,24 @@ export function getLayer(formData, payload, onAddFilter, setTooltip, selected, o
     return baseColor;
   };
 
-  var tooltipContentGenerator = fd.line_column && fd.metric && ['geohash', 'zipcode'].includes(fd.line_type) ? setTooltipContent(fd) : undefined;
-  return new PolygonLayer(Object.assign({
+  const tooltipContentGenerator = fd.line_column && fd.metric && ['geohash', 'zipcode'].includes(fd.line_type) ? setTooltipContent(fd) : undefined;
+  return new PolygonLayer(_extends({
     id: "path-layer-" + fd.slice_id,
-    data: data,
+    data,
     pickable: true,
     filled: fd.filled,
     stroked: fd.stroked,
-    getPolygon: function getPolygon(d) {
-      return d.polygon;
-    },
+    getPolygon: d => d.polygon,
     getFillColor: colorScaler,
     getLineColor: [sc.r, sc.g, sc.b, 255 * sc.a],
     getLineWidth: fd.line_width,
     extruded: fd.extruded,
-    getElevation: function getElevation(d) {
-      return _getElevation(d, colorScaler);
-    },
+    getElevation: d => _getElevation(d, colorScaler),
     elevationScale: fd.multiplier,
     fp64: true
   }, commonLayerProps(fd, setTooltip, tooltipContentGenerator, onSelect)));
 }
-var propTypes = {
+const propTypes = {
   formData: PropTypes.object.isRequired,
   payload: PropTypes.object.isRequired,
   setControlValue: PropTypes.func.isRequired,
@@ -158,26 +128,23 @@ var propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired
 };
-var defaultProps = {
-  onAddFilter: function onAddFilter() {},
-  setTooltip: function setTooltip() {}
+const defaultProps = {
+  onAddFilter() {},
+
+  setTooltip() {}
+
 };
 
-var DeckGLPolygon = /*#__PURE__*/function (_React$Component) {
-  _inheritsLoose(DeckGLPolygon, _React$Component);
-
-  function DeckGLPolygon(props) {
-    var _this;
-
-    _this = _React$Component.call(this, props) || this;
-    _this.state = DeckGLPolygon.getDerivedStateFromProps(props);
-    _this.getLayers = _this.getLayers.bind(_assertThisInitialized(_this));
-    _this.onSelect = _this.onSelect.bind(_assertThisInitialized(_this));
-    _this.onValuesChange = _this.onValuesChange.bind(_assertThisInitialized(_this));
-    return _this;
+class DeckGLPolygon extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = DeckGLPolygon.getDerivedStateFromProps(props);
+    this.getLayers = this.getLayers.bind(this);
+    this.onSelect = this.onSelect.bind(this);
+    this.onValuesChange = this.onValuesChange.bind(this);
   }
 
-  DeckGLPolygon.getDerivedStateFromProps = function getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props, state) {
     // the state is computed only from the payload; if it hasn't changed, do
     // not recompute state since this would reset selections and/or the play
     // slider position due to changes in form controls
@@ -185,50 +152,46 @@ var DeckGLPolygon = /*#__PURE__*/function (_React$Component) {
       return null;
     }
 
-    var features = props.payload.data.features || [];
-    var timestamps = features.map(function (f) {
-      return f.__timestamp;
-    }); // the granularity has to be read from the payload form_data, not the
+    const features = props.payload.data.features || [];
+    const timestamps = features.map(f => f.__timestamp); // the granularity has to be read from the payload form_data, not the
     // props formData which comes from the instantaneous controls state
 
-    var granularity = props.payload.form_data.time_grain_sqla || props.payload.form_data.granularity || 'P1D';
-
-    var _getPlaySliderParams = getPlaySliderParams(timestamps, granularity),
-        start = _getPlaySliderParams.start,
-        end = _getPlaySliderParams.end,
-        getStep = _getPlaySliderParams.getStep,
-        values = _getPlaySliderParams.values,
-        disabled = _getPlaySliderParams.disabled;
-
-    var viewport = props.formData.autozoom ? fitViewport(props.viewport, getPoints(features)) : props.viewport;
+    const granularity = props.payload.form_data.time_grain_sqla || props.payload.form_data.granularity || 'P1D';
+    const {
+      start,
+      end,
+      getStep,
+      values,
+      disabled
+    } = getPlaySliderParams(timestamps, granularity);
+    const viewport = props.formData.autozoom ? fitViewport(props.viewport, getPoints(features)) : props.viewport;
     return {
-      start: start,
-      end: end,
-      getStep: getStep,
-      values: values,
-      disabled: disabled,
-      viewport: viewport,
+      start,
+      end,
+      getStep,
+      values,
+      disabled,
+      viewport,
       selected: [],
       lastClick: 0,
       formData: props.payload.form_data
     };
-  };
+  }
 
-  var _proto = DeckGLPolygon.prototype;
+  onSelect(polygon) {
+    const {
+      formData,
+      onAddFilter
+    } = this.props;
+    const now = new Date();
+    const doubleClick = now - this.state.lastClick <= DOUBLE_CLICK_TRESHOLD; // toggle selected polygons
 
-  _proto.onSelect = function onSelect(polygon) {
-    var _this$props = this.props,
-        formData = _this$props.formData,
-        onAddFilter = _this$props.onAddFilter;
-    var now = new Date();
-    var doubleClick = now - this.state.lastClick <= DOUBLE_CLICK_TRESHOLD; // toggle selected polygons
-
-    var selected = [].concat(this.state.selected);
+    const selected = [...this.state.selected];
 
     if (doubleClick) {
       selected.splice(0, selected.length, polygon);
     } else if (formData.toggle_polygons) {
-      var i = selected.indexOf(polygon);
+      const i = selected.indexOf(polygon);
 
       if (i === -1) {
         selected.push(polygon);
@@ -240,62 +203,58 @@ var DeckGLPolygon = /*#__PURE__*/function (_React$Component) {
     }
 
     this.setState({
-      selected: selected,
+      selected,
       lastClick: now
     });
 
     if (formData.table_filter) {
       onAddFilter(formData.line_column, selected, false, true);
     }
-  };
+  }
 
-  _proto.onValuesChange = function onValuesChange(values) {
+  onValuesChange(values) {
     this.setState({
       values: Array.isArray(values) ? values : [values, values + this.state.getStep(values)]
     });
-  };
+  }
 
-  _proto.getLayers = function getLayers(values) {
+  getLayers(values) {
     if (this.props.payload.data.features === undefined) {
       return [];
     }
 
-    var filters = []; // time filter
+    const filters = []; // time filter
 
     if (values[0] === values[1] || values[1] === this.end) {
-      filters.push(function (d) {
-        return d.__timestamp >= values[0] && d.__timestamp <= values[1];
-      });
+      filters.push(d => d.__timestamp >= values[0] && d.__timestamp <= values[1]);
     } else {
-      filters.push(function (d) {
-        return d.__timestamp >= values[0] && d.__timestamp < values[1];
-      });
+      filters.push(d => d.__timestamp >= values[0] && d.__timestamp < values[1]);
     }
 
-    var layer = getLayer(this.props.formData, this.props.payload, this.props.onAddFilter, this.props.setTooltip, this.state.selected, this.onSelect, filters);
+    const layer = getLayer(this.props.formData, this.props.payload, this.props.onAddFilter, this.props.setTooltip, this.state.selected, this.onSelect, filters);
     return [layer];
-  };
+  }
 
-  _proto.render = function render() {
-    var _this$props2 = this.props,
-        payload = _this$props2.payload,
-        formData = _this$props2.formData,
-        setControlValue = _this$props2.setControlValue;
-    var _this$state = this.state,
-        start = _this$state.start,
-        end = _this$state.end,
-        getStep = _this$state.getStep,
-        values = _this$state.values,
-        disabled = _this$state.disabled,
-        viewport = _this$state.viewport;
-    var fd = formData;
-    var metricLabel = fd.metric ? fd.metric.label || fd.metric : null;
+  render() {
+    const {
+      payload,
+      formData,
+      setControlValue
+    } = this.props;
+    const {
+      start,
+      end,
+      getStep,
+      values,
+      disabled,
+      viewport
+    } = this.state;
+    const fd = formData;
+    const metricLabel = fd.metric ? fd.metric.label || fd.metric : null;
 
-    var accessor = function accessor(d) {
-      return d[metricLabel];
-    };
+    const accessor = d => d[metricLabel];
 
-    var buckets = getBuckets(formData, payload.data.features, accessor);
+    const buckets = getBuckets(formData, payload.data.features, accessor);
     return React.createElement("div", {
       style: {
         position: 'relative'
@@ -321,10 +280,9 @@ var DeckGLPolygon = /*#__PURE__*/function (_React$Component) {
       position: formData.legend_position,
       format: formData.legend_format
     })));
-  };
+  }
 
-  return DeckGLPolygon;
-}(React.Component);
+}
 
 DeckGLPolygon.propTypes = propTypes;
 DeckGLPolygon.defaultProps = defaultProps;

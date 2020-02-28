@@ -1,12 +1,3 @@
-import "core-js/modules/es.array.every";
-import "core-js/modules/es.array.includes";
-import "core-js/modules/es.array.index-of";
-import "core-js/modules/es.array.map";
-import "core-js/modules/es.regexp.exec";
-import "core-js/modules/es.string.ends-with";
-import "core-js/modules/es.string.includes";
-import "core-js/modules/es.string.split";
-
 /* eslint-disable no-negated-condition */
 
 /**
@@ -30,7 +21,7 @@ import "core-js/modules/es.string.split";
 import moment from 'moment'; // array with the minimum values of each part of a timestamp -- note that
 // months are zero-indexed in Javascript
 
-var truncatePartTo = [1, // year
+const truncatePartTo = [1, // year
 0, // month
 1, // day
 0, // hour
@@ -42,16 +33,14 @@ export function truncate(timestamp, step) {
   /*
    * Truncate timestamp down to duration resolution.
    */
-  var lowerBound = moment(timestamp).subtract(step);
-  var explodedTimestamp = timestamp.toArray();
-  var explodedLowerBound = lowerBound.toArray();
-  var firstDiffIndex = explodedTimestamp.map(function (part, i) {
-    return explodedLowerBound[i] !== part;
-  }).indexOf(true);
-  var dateParts = explodedTimestamp.map(function (part, i) {
+  const lowerBound = moment(timestamp).subtract(step);
+  const explodedTimestamp = timestamp.toArray();
+  const explodedLowerBound = lowerBound.toArray();
+  const firstDiffIndex = explodedTimestamp.map((part, i) => explodedLowerBound[i] !== part).indexOf(true);
+  const dateParts = explodedTimestamp.map((part, i) => {
     if (i === firstDiffIndex) {
       // truncate down to closest `truncatePartTo[i] + n * step`
-      var difference = part - explodedLowerBound[i];
+      const difference = part - explodedLowerBound[i];
       return part - (part - truncatePartTo[i]) % difference;
     }
 
@@ -70,16 +59,16 @@ function getStepSeconds(step, start) {
    * The step might be ambigous, eg, "1 month" has a variable number of
    * seconds, which is why we need to know the start time.
    */
-  var startMillliseconds = parseInt(moment(start).format('x'), 10);
-  var endMilliseconds = parseInt(moment(start).add(step).format('x'), 10);
+  const startMillliseconds = parseInt(moment(start).format('x'), 10);
+  const endMilliseconds = parseInt(moment(start).add(step).format('x'), 10);
   return endMilliseconds - startMillliseconds;
 }
 
 export function getPlaySliderParams(timestamps, timeGrain) {
-  var minTimestamp = moment(Math.min.apply(Math, timestamps));
-  var maxTimestamp = moment(Math.max.apply(Math, timestamps));
-  var step;
-  var reference;
+  const minTimestamp = moment(Math.min(...timestamps));
+  const maxTimestamp = moment(Math.max(...timestamps));
+  let step;
+  let reference;
 
   if (timeGrain.includes('/')) {
     // Here, time grain is a time interval instead of a simple duration, either
@@ -87,7 +76,7 @@ export function getPlaySliderParams(timestamps, timeGrain) {
     // duration and make sure that start and end are in the right places. For
     // example, if `reference` is a Saturday and `duration` is 1 week (P1W)
     // then both start and end should be Saturdays.
-    var parts = timeGrain.split('/', 2);
+    const parts = timeGrain.split('/', 2);
 
     if (parts[0].endsWith('Z')) {
       // ISO string
@@ -103,8 +92,8 @@ export function getPlaySliderParams(timestamps, timeGrain) {
   } // find the largest `reference + n * step` smaller than the minimum timestamp
 
 
-  var start;
-  var minValue = minTimestamp.valueOf();
+  let start;
+  const minValue = minTimestamp.valueOf();
 
   for (start = reference.clone(); start.valueOf() < minValue;) {
     start.add(step);
@@ -115,8 +104,8 @@ export function getPlaySliderParams(timestamps, timeGrain) {
   } // find the smallest `reference + n * step` larger than the maximum timestamp
 
 
-  var end;
-  var maxValue = maxTimestamp.valueOf();
+  let end;
+  const maxValue = maxTimestamp.valueOf();
 
   for (end = reference.clone(); end.valueOf() > maxValue;) {
     end.subtract(step);
@@ -126,17 +115,13 @@ export function getPlaySliderParams(timestamps, timeGrain) {
     end.add(step);
   }
 
-  var values = timeGrain != null ? [start, start.clone().add(step)] : [start, end];
-  var disabled = timestamps.every(function (timestamp) {
-    return timestamp === null;
-  });
+  const values = timeGrain != null ? [start, start.clone().add(step)] : [start, end];
+  const disabled = timestamps.every(timestamp => timestamp === null);
   return {
     start: parseInt(start.format('x'), 10),
     end: parseInt(end.format('x'), 10),
     getStep: getStepSeconds.bind(this, step),
-    values: values.map(function (v) {
-      return parseInt(v.format('x'), 10);
-    }),
-    disabled: disabled
+    values: values.map(v => parseInt(v.format('x'), 10)),
+    disabled
   };
 }

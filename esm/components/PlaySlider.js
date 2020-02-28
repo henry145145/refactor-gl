@@ -1,13 +1,3 @@
-import "core-js/modules/es.array.iterator";
-import "core-js/modules/es.array.join";
-import "core-js/modules/es.array.map";
-import "core-js/modules/es.object.to-string";
-import "core-js/modules/web.dom-collections.iterator";
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
-
 /* eslint-disable react/jsx-sort-default-props */
 
 /* eslint-disable react/sort-prop-types */
@@ -46,7 +36,7 @@ import Mousetrap from 'mousetrap';
 import { t } from '@superset-ui/translation';
 import BootrapSliderWrapper from './BootstrapSliderWrapper';
 import './PlaySlider.css';
-var propTypes = {
+const propTypes = {
   start: PropTypes.number.isRequired,
   step: PropTypes.number.isRequired,
   end: PropTypes.number.isRequired,
@@ -59,8 +49,8 @@ var propTypes = {
   disabled: PropTypes.bool,
   range: PropTypes.bool
 };
-var defaultProps = {
-  onChange: function onChange() {},
+const defaultProps = {
+  onChange: () => {},
   loopDuration: 15000,
   maxFrames: 100,
   orientation: 'horizontal',
@@ -68,59 +58,51 @@ var defaultProps = {
   disabled: false,
   range: true
 };
-
-var PlaySlider = /*#__PURE__*/function (_React$PureComponent) {
-  _inheritsLoose(PlaySlider, _React$PureComponent);
-
-  function PlaySlider(props) {
-    var _this;
-
-    _this = _React$PureComponent.call(this, props) || this;
-    _this.state = {
+export default class PlaySlider extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
       intervalId: null
     };
-    var range = props.end - props.start;
-    var frames = Math.min(props.maxFrames, range / props.step);
-    var width = range / frames;
-    _this.intervalMilliseconds = props.loopDuration / frames;
-    _this.increment = width < props.step ? props.step : width - width % props.step;
-    _this.onChange = _this.onChange.bind(_assertThisInitialized(_this));
-    _this.play = _this.play.bind(_assertThisInitialized(_this));
-    _this.pause = _this.pause.bind(_assertThisInitialized(_this));
-    _this.stepBackward = _this.stepBackward.bind(_assertThisInitialized(_this));
-    _this.stepForward = _this.stepForward.bind(_assertThisInitialized(_this));
-    _this.getPlayClass = _this.getPlayClass.bind(_assertThisInitialized(_this));
-    _this.formatter = _this.formatter.bind(_assertThisInitialized(_this));
-    return _this;
+    const range = props.end - props.start;
+    const frames = Math.min(props.maxFrames, range / props.step);
+    const width = range / frames;
+    this.intervalMilliseconds = props.loopDuration / frames;
+    this.increment = width < props.step ? props.step : width - width % props.step;
+    this.onChange = this.onChange.bind(this);
+    this.play = this.play.bind(this);
+    this.pause = this.pause.bind(this);
+    this.stepBackward = this.stepBackward.bind(this);
+    this.stepForward = this.stepForward.bind(this);
+    this.getPlayClass = this.getPlayClass.bind(this);
+    this.formatter = this.formatter.bind(this);
   }
 
-  var _proto = PlaySlider.prototype;
-
-  _proto.componentDidMount = function componentDidMount() {
+  componentDidMount() {
     Mousetrap.bind(['space'], this.play);
-  };
+  }
 
-  _proto.componentWillUnmount = function componentWillUnmount() {
+  componentWillUnmount() {
     Mousetrap.unbind(['space']);
-  };
+  }
 
-  _proto.onChange = function onChange(event) {
+  onChange(event) {
     this.props.onChange(event.target.value);
 
     if (this.state.intervalId != null) {
       this.pause();
     }
-  };
+  }
 
-  _proto.getPlayClass = function getPlayClass() {
+  getPlayClass() {
     if (this.state.intervalId == null) {
       return 'fa fa-play fa-lg slider-button';
     }
 
     return 'fa fa-pause fa-lg slider-button';
-  };
+  }
 
-  _proto.play = function play() {
+  play() {
     if (this.props.disabled) {
       return;
     }
@@ -128,74 +110,64 @@ var PlaySlider = /*#__PURE__*/function (_React$PureComponent) {
     if (this.state.intervalId != null) {
       this.pause();
     } else {
-      var id = setInterval(this.stepForward, this.intervalMilliseconds);
+      const id = setInterval(this.stepForward, this.intervalMilliseconds);
       this.setState({
         intervalId: id
       });
     }
-  };
+  }
 
-  _proto.pause = function pause() {
+  pause() {
     clearInterval(this.state.intervalId);
     this.setState({
       intervalId: null
     });
-  };
+  }
 
-  _proto.stepForward = function stepForward() {
-    var _this2 = this;
-
-    var _this$props = this.props,
-        start = _this$props.start,
-        end = _this$props.end,
-        step = _this$props.step,
-        values = _this$props.values,
-        disabled = _this$props.disabled;
-
-    if (disabled) {
-      return;
-    }
-
-    var currentValues = Array.isArray(values) ? values : [values, values + step];
-    var nextValues = currentValues.map(function (value) {
-      return value + _this2.increment;
-    });
-    var carriageReturn = nextValues[1] > end ? nextValues[0] - start : 0;
-    this.props.onChange(nextValues.map(function (value) {
-      return value - carriageReturn;
-    }));
-  };
-
-  _proto.stepBackward = function stepBackward() {
-    var _this3 = this;
-
-    var _this$props2 = this.props,
-        start = _this$props2.start,
-        end = _this$props2.end,
-        step = _this$props2.step,
-        values = _this$props2.values,
-        disabled = _this$props2.disabled;
+  stepForward() {
+    const {
+      start,
+      end,
+      step,
+      values,
+      disabled
+    } = this.props;
 
     if (disabled) {
       return;
     }
 
-    var currentValues = Array.isArray(values) ? values : [values, values + step];
-    var nextValues = currentValues.map(function (value) {
-      return value - _this3.increment;
-    });
-    var carriageReturn = nextValues[0] < start ? end - nextValues[1] : 0;
-    this.props.onChange(nextValues.map(function (value) {
-      return value + carriageReturn;
-    }));
-  };
+    const currentValues = Array.isArray(values) ? values : [values, values + step];
+    const nextValues = currentValues.map(value => value + this.increment);
+    const carriageReturn = nextValues[1] > end ? nextValues[0] - start : 0;
+    this.props.onChange(nextValues.map(value => value - carriageReturn));
+  }
 
-  _proto.formatter = function formatter(values) {
+  stepBackward() {
+    const {
+      start,
+      end,
+      step,
+      values,
+      disabled
+    } = this.props;
+
+    if (disabled) {
+      return;
+    }
+
+    const currentValues = Array.isArray(values) ? values : [values, values + step];
+    const nextValues = currentValues.map(value => value - this.increment);
+    const carriageReturn = nextValues[0] < start ? end - nextValues[1] : 0;
+    this.props.onChange(nextValues.map(value => value + carriageReturn));
+  }
+
+  formatter(values) {
     if (this.props.disabled) {
       return t('Data has no time steps');
     }
 
-    var parts = values;
+    let parts = values;
 
     if (!Array.isArray(values)) {
       parts = [values];
@@ -203,21 +175,20 @@ var PlaySlider = /*#__PURE__*/function (_React$PureComponent) {
       parts = [values[0]];
     }
 
-    return parts.map(function (value) {
-      return new Date(value).toUTCString();
-    }).join(' : ');
-  };
+    return parts.map(value => new Date(value).toUTCString()).join(' : ');
+  }
 
-  _proto.render = function render() {
-    var _this$props3 = this.props,
-        start = _this$props3.start,
-        end = _this$props3.end,
-        step = _this$props3.step,
-        orientation = _this$props3.orientation,
-        reversed = _this$props3.reversed,
-        disabled = _this$props3.disabled,
-        range = _this$props3.range,
-        values = _this$props3.values;
+  render() {
+    const {
+      start,
+      end,
+      step,
+      orientation,
+      reversed,
+      disabled,
+      range,
+      values
+    } = this.props;
     return React.createElement("div", {
       className: "play-slider"
     }, React.createElement("div", {
@@ -245,11 +216,8 @@ var PlaySlider = /*#__PURE__*/function (_React$PureComponent) {
       reversed: reversed,
       disabled: disabled ? 'disabled' : 'enabled'
     })));
-  };
+  }
 
-  return PlaySlider;
-}(React.PureComponent);
-
-export { PlaySlider as default };
+}
 PlaySlider.propTypes = propTypes;
 PlaySlider.defaultProps = defaultProps;

@@ -1,6 +1,4 @@
-import "core-js/modules/es.array.for-each";
-import "core-js/modules/es.object.assign";
-import "core-js/modules/web.dom-collections.for-each";
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -28,8 +26,8 @@ import { createCategoricalDeckGLComponent } from '../../factory';
 import TooltipRow from '../../TooltipRow';
 
 function getPoints(data) {
-  var points = [];
-  data.forEach(function (d) {
+  const points = [];
+  data.forEach(d => {
     points.push(d.sourcePosition);
     points.push(d.targetPosition);
   });
@@ -37,34 +35,28 @@ function getPoints(data) {
 }
 
 function setTooltipContent(formData) {
-  return function (o) {
-    return React.createElement("div", {
-      className: "deckgl-tooltip"
-    }, React.createElement(TooltipRow, {
-      label: t('Start (Longitude, Latitude)') + ": ",
-      value: o.object.sourcePosition[0] + ", " + o.object.sourcePosition[1]
-    }), React.createElement(TooltipRow, {
-      label: t('End (Longitude, Latitude)') + ": ",
-      value: o.object.targetPosition[0] + ", " + o.object.targetPosition[1]
-    }), formData.dimension && React.createElement(TooltipRow, {
-      label: formData.dimension + ": ",
-      value: "" + o.object.cat_color
-    }));
-  };
+  return o => React.createElement("div", {
+    className: "deckgl-tooltip"
+  }, React.createElement(TooltipRow, {
+    label: t('Start (Longitude, Latitude)') + ": ",
+    value: o.object.sourcePosition[0] + ", " + o.object.sourcePosition[1]
+  }), React.createElement(TooltipRow, {
+    label: t('End (Longitude, Latitude)') + ": ",
+    value: o.object.targetPosition[0] + ", " + o.object.targetPosition[1]
+  }), formData.dimension && React.createElement(TooltipRow, {
+    label: formData.dimension + ": ",
+    value: "" + o.object.cat_color
+  }));
 }
 
 export function getLayer(fd, payload, onAddFilter, setTooltip) {
-  var data = payload.data.features;
-  var sc = fd.color_picker;
-  var tc = fd.target_color_picker;
-  return new ArcLayer(Object.assign({
-    data: data,
-    getSourceColor: function getSourceColor(d) {
-      return d.sourceColor || d.color || [sc.r, sc.g, sc.b, 255 * sc.a];
-    },
-    getTargetColor: function getTargetColor(d) {
-      return d.targetColor || d.color || [tc.r, tc.g, tc.b, 255 * tc.a];
-    },
+  const data = payload.data.features;
+  const sc = fd.color_picker;
+  const tc = fd.target_color_picker;
+  return new ArcLayer(_extends({
+    data,
+    getSourceColor: d => d.sourceColor || d.color || [sc.r, sc.g, sc.b, 255 * sc.a],
+    getTargetColor: d => d.targetColor || d.color || [tc.r, tc.g, tc.b, 255 * tc.a],
     id: "path-layer-" + fd.slice_id,
     strokeWidth: fd.stroke_width ? fd.stroke_width : 3
   }, commonLayerProps(fd, setTooltip, setTooltipContent(fd))));

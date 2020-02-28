@@ -1,5 +1,3 @@
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
-
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,29 +18,18 @@ function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.crea
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-var propTypes = {
+const propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired
 };
-
-var TooltipRow = /*#__PURE__*/function (_React$PureComponent) {
-  _inheritsLoose(TooltipRow, _React$PureComponent);
-
-  function TooltipRow() {
-    return _React$PureComponent.apply(this, arguments) || this;
+export default class TooltipRow extends React.PureComponent {
+  render() {
+    const {
+      label,
+      value
+    } = this.props;
+    return React.createElement("div", null, label, React.createElement("strong", null, value));
   }
 
-  var _proto = TooltipRow.prototype;
-
-  _proto.render = function render() {
-    var _this$props = this.props,
-        label = _this$props.label,
-        value = _this$props.value;
-    return React.createElement("div", null, label, React.createElement("strong", null, value));
-  };
-
-  return TooltipRow;
-}(React.PureComponent);
-
-export { TooltipRow as default };
+}
 TooltipRow.propTypes = propTypes;

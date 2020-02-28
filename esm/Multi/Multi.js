@@ -1,12 +1,4 @@
-import "core-js/modules/es.array.concat";
-import "core-js/modules/es.array.for-each";
-import "core-js/modules/es.object.assign";
-import "core-js/modules/es.object.values";
-import "core-js/modules/web.dom-collections.for-each";
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /* eslint-disable react/jsx-sort-default-props */
 
@@ -43,7 +35,7 @@ import { SupersetClient } from '@superset-ui/connection';
 import DeckGLContainer from '../DeckGLContainer';
 import { getExploreLongUrl } from '../utils/explore';
 import layerGenerators from '../layers';
-var propTypes = {
+const propTypes = {
   formData: PropTypes.object.isRequired,
   payload: PropTypes.object.isRequired,
   setControlValue: PropTypes.func.isRequired,
@@ -52,90 +44,92 @@ var propTypes = {
   setTooltip: PropTypes.func,
   onSelect: PropTypes.func
 };
-var defaultProps = {
-  onAddFilter: function onAddFilter() {},
-  setTooltip: function setTooltip() {},
-  onSelect: function onSelect() {}
+const defaultProps = {
+  onAddFilter() {},
+
+  setTooltip() {},
+
+  onSelect() {}
+
 };
 
-var DeckMulti = /*#__PURE__*/function (_React$PureComponent) {
-  _inheritsLoose(DeckMulti, _React$PureComponent);
-
-  function DeckMulti(props) {
-    var _this;
-
-    _this = _React$PureComponent.call(this, props) || this;
-    _this.state = {
+class DeckMulti extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
       subSlicesLayers: {}
     };
-    _this.onViewportChange = _this.onViewportChange.bind(_assertThisInitialized(_this));
-    return _this;
+    this.onViewportChange = this.onViewportChange.bind(this);
   }
 
-  var _proto = DeckMulti.prototype;
-
-  _proto.componentDidMount = function componentDidMount() {
-    var _this$props = this.props,
-        formData = _this$props.formData,
-        payload = _this$props.payload;
+  componentDidMount() {
+    const {
+      formData,
+      payload
+    } = this.props;
     this.loadLayers(formData, payload);
-  };
+  }
 
-  _proto.UNSAFE_componentWillReceiveProps = function UNSAFE_componentWillReceiveProps(nextProps) {
-    var formData = nextProps.formData,
-        payload = nextProps.payload;
-    var hasChanges = !_.isEqual(this.props.formData.deck_slices, nextProps.formData.deck_slices);
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const {
+      formData,
+      payload
+    } = nextProps;
+    const hasChanges = !_.isEqual(this.props.formData.deck_slices, nextProps.formData.deck_slices);
 
     if (hasChanges) {
       this.loadLayers(formData, payload);
     }
-  };
+  }
 
-  _proto.onViewportChange = function onViewportChange(viewport) {
+  onViewportChange(viewport) {
     this.setState({
-      viewport: viewport
+      viewport
     });
-  };
+  }
 
-  _proto.loadLayers = function loadLayers(formData, payload, viewport) {
-    var _this2 = this;
-
+  loadLayers(formData, payload, viewport) {
     this.setState({
       subSlicesLayers: {},
-      viewport: viewport
+      viewport
     });
-    payload.data.slices.forEach(function (subslice) {
+    payload.data.slices.forEach(subslice => {
       // Filters applied to multi_deck are passed down to underlying charts
       // note that dashboard contextual information (filter_immune_slices and such) aren't
       // taken into consideration here
-      var filters = [].concat(subslice.form_data.filters || [], formData.filters || [], formData.extra_filters || []);
-      var subsliceCopy = Object.assign({}, subslice, {
-        form_data: Object.assign({}, subslice.form_data, {
-          filters: filters
+      const filters = [...(subslice.form_data.filters || []), ...(formData.filters || []), ...(formData.extra_filters || [])];
+
+      const subsliceCopy = _extends({}, subslice, {
+        form_data: _extends({}, subslice.form_data, {
+          filters
         })
       });
+
       SupersetClient.get({
         endpoint: getExploreLongUrl(subsliceCopy.form_data, 'json')
-      }).then(function (_ref) {
-        var _Object$assign;
-
-        var json = _ref.json;
-        var layer = layerGenerators[subsliceCopy.form_data.viz_type](subsliceCopy.form_data, json, _this2.props.onAddFilter, _this2.props.setTooltip, [], _this2.props.onSelect);
-
-        _this2.setState({
-          subSlicesLayers: Object.assign({}, _this2.state.subSlicesLayers, (_Object$assign = {}, _Object$assign[subsliceCopy.slice_id] = layer, _Object$assign))
+      }).then(({
+        json
+      }) => {
+        const layer = layerGenerators[subsliceCopy.form_data.viz_type](subsliceCopy.form_data, json, this.props.onAddFilter, this.props.setTooltip, [], this.props.onSelect);
+        this.setState({
+          subSlicesLayers: _extends({}, this.state.subSlicesLayers, {
+            [subsliceCopy.slice_id]: layer
+          })
         });
-      }).catch(function () {});
+      }).catch(() => {});
     });
-  };
+  }
 
-  _proto.render = function render() {
-    var _this$props2 = this.props,
-        payload = _this$props2.payload,
-        formData = _this$props2.formData,
-        setControlValue = _this$props2.setControlValue;
-    var subSlicesLayers = this.state.subSlicesLayers;
-    var layers = Object.values(subSlicesLayers);
+  render() {
+    const {
+      payload,
+      formData,
+      setControlValue
+    } = this.props;
+    const {
+      subSlicesLayers
+    } = this.state;
+    const layers = Object.values(subSlicesLayers);
     return React.createElement(DeckGLContainer, {
       mapboxApiAccessToken: payload.data.mapboxApiKey,
       viewport: this.state.viewport || this.props.viewport,
@@ -144,10 +138,9 @@ var DeckMulti = /*#__PURE__*/function (_React$PureComponent) {
       setControlValue: setControlValue,
       onViewportChange: this.onViewportChange
     });
-  };
+  }
 
-  return DeckMulti;
-}(React.PureComponent);
+}
 
 DeckMulti.propTypes = propTypes;
 DeckMulti.defaultProps = defaultProps;

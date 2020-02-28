@@ -1,5 +1,4 @@
-import "core-js/modules/es.array.map";
-import "core-js/modules/es.object.assign";
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -28,65 +27,57 @@ import TooltipRow from '../../TooltipRow';
 import { unitToRadius } from '../../utils/geo';
 
 function getPoints(data) {
-  return data.map(function (d) {
-    return d.position;
-  });
+  return data.map(d => d.position);
 }
 
 function setTooltipContent(formData) {
-  return function (o) {
-    return React.createElement("div", {
-      className: "deckgl-tooltip"
-    }, React.createElement(TooltipRow, {
-      label: t('Longitude and Latitude') + ": ",
-      value: o.object.position[0] + ", " + o.object.position[1]
-    }), o.object.cat_color && React.createElement(TooltipRow, {
-      label: t('Category') + ": ",
-      value: "" + o.object.cat_color
-    }), o.object.metric && React.createElement(TooltipRow, {
-      label: formData.point_radius_fixed.value.label + ": ",
-      value: "" + o.object.metric
-    }));
-  };
+  return o => React.createElement("div", {
+    className: "deckgl-tooltip"
+  }, React.createElement(TooltipRow, {
+    label: t('Longitude and Latitude') + ": ",
+    value: o.object.position[0] + ", " + o.object.position[1]
+  }), o.object.cat_color && React.createElement(TooltipRow, {
+    label: t('Category') + ": ",
+    value: "" + o.object.cat_color
+  }), o.object.metric && React.createElement(TooltipRow, {
+    label: formData.point_radius_fixed.value.label + ": ",
+    value: "" + o.object.metric
+  }));
 }
 
 export function getLayer(formData, payload, onAddFilter, setTooltip) {
-  var fd = formData;
-  var dataWithRadius = payload.data.features.map(function (d) {
-    var radius = unitToRadius(fd.point_unit, d.radius) || 10;
+  const fd = formData;
+  const dataWithRadius = payload.data.features.map(d => {
+    let radius = unitToRadius(fd.point_unit, d.radius) || 10;
 
     if (fd.multiplier) {
       radius *= fd.multiplier;
     }
 
     if (d.color) {
-      return Object.assign({}, d, {
-        radius: radius
+      return _extends({}, d, {
+        radius
       });
     }
 
-    var c = fd.color_picker || {
+    const c = fd.color_picker || {
       r: 0,
       g: 0,
       b: 0,
       a: 1
     };
-    var color = [c.r, c.g, c.b, c.a * 255];
-    return Object.assign({}, d, {
-      radius: radius,
-      color: color
+    const color = [c.r, c.g, c.b, c.a * 255];
+    return _extends({}, d, {
+      radius,
+      color
     });
   });
-  return new ScatterplotLayer(Object.assign({
+  return new ScatterplotLayer(_extends({
     id: "scatter-layer-" + fd.slice_id,
     data: dataWithRadius,
     fp64: true,
-    getFillColor: function getFillColor(d) {
-      return d.color;
-    },
-    getRadius: function getRadius(d) {
-      return d.radius;
-    },
+    getFillColor: d => d.color,
+    getRadius: d => d.radius,
     radiusMinPixels: fd.min_radius || null,
     radiusMaxPixels: fd.max_radius || null,
     stroked: false

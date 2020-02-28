@@ -1,10 +1,3 @@
-import "core-js/modules/es.array.map";
-import "core-js/modules/es.array.some";
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
-
 /* eslint-disable react/jsx-sort-default-props */
 
 /* eslint-disable react/sort-prop-types */
@@ -37,13 +30,12 @@ import { StaticMap } from 'react-map-gl';
 import DeckGL from 'deck.gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './css/deckgl.css';
-var TICK = 250; // milliseconds
+const TICK = 250; // milliseconds
 
-var propTypes = {
+const propTypes = {
   viewport: PropTypes.object.isRequired,
   layers: PropTypes.array.isRequired,
   setControlValue: PropTypes.func,
-  onViewportChange: PropTypes.func,
   mapStyle: PropTypes.string,
   mapboxApiAccessToken: PropTypes.string.isRequired,
   children: PropTypes.node,
@@ -51,50 +43,45 @@ var propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired
 };
-var defaultProps = {
+const defaultProps = {
   mapStyle: 'light',
-  setControlValue: function setControlValue() {},
+  setControlValue: () => {},
   children: null,
   bottomMargin: 0
 };
+export default class DeckGLContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.tick = this.tick.bind(this);
+    this.onViewStateChange = this.onViewStateChange.bind(this); // This has to be placed after this.tick is bound to this
 
-var DeckGLContainer = /*#__PURE__*/function (_React$Component) {
-  _inheritsLoose(DeckGLContainer, _React$Component);
-
-  function DeckGLContainer(props) {
-    var _this;
-
-    _this = _React$Component.call(this, props) || this;
-    _this.tick = _this.tick.bind(_assertThisInitialized(_this)); // This has to be placed after this.tick is bound to this
-
-    _this.state = {
-      timer: setInterval(_this.tick, TICK),
-      viewState: _this.props.viewport
+    this.state = {
+      timer: setInterval(this.tick, TICK),
+      viewState: props.viewport
     };
-    _this.onViewStateChange = _this.onViewStateChange.bind(_assertThisInitialized(_this));
-    return _this;
   }
 
-  var _proto = DeckGLContainer.prototype;
-
-  _proto.componentWillUnmount = function componentWillUnmount() {
+  componentWillUnmount() {
     clearInterval(this.state.timer);
-  };
+  }
 
-  _proto.onViewStateChange = function onViewStateChange(_ref) {
-    var viewState = _ref.viewState;
+  onViewStateChange({
+    viewState
+  }) {
     this.setState({
-      viewState: viewState,
+      viewState,
       lastUpdate: Date.now()
     });
-  };
+  }
 
-  _proto.tick = function tick() {
+  tick() {
     // Rate limiting updating viewport controls as it triggers lotsa renders
-    var lastUpdate = this.state.lastUpdate;
+    const {
+      lastUpdate
+    } = this.state;
 
     if (lastUpdate && Date.now() - lastUpdate > TICK) {
-      var setCV = this.props.setControlValue;
+      const setCV = this.props.setControlValue;
 
       if (setCV) {
         setCV('viewport', this.state.viewState);
@@ -104,42 +91,33 @@ var DeckGLContainer = /*#__PURE__*/function (_React$Component) {
         lastUpdate: null
       });
     }
-  };
+  }
 
-  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-    var viewport = nextProps.viewport;
-    this.setState({
-      viewState: viewport
-    });
-  };
-
-  _proto.layers = function layers() {
+  layers() {
     // Support for layer factory
-    if (this.props.layers.some(function (l) {
-      return typeof l === 'function';
-    })) {
-      return this.props.layers.map(function (l) {
-        return typeof l === 'function' ? l() : l;
-      });
+    if (this.props.layers.some(l => typeof l === 'function')) {
+      return this.props.layers.map(l => typeof l === 'function' ? l() : l);
     }
 
     return this.props.layers;
-  };
+  }
 
-  _proto.render = function render() {
-    var _this$props = this.props,
-        children = _this$props.children,
-        bottomMargin = _this$props.bottomMargin,
-        height = _this$props.height,
-        width = _this$props.width;
-    var viewState = this.state.viewState;
-    var adjustedHeight = height - bottomMargin;
-    var layers = this.layers();
-    console.log(layers);
+  render() {
+    const {
+      children,
+      bottomMargin,
+      height,
+      width
+    } = this.props;
+    const {
+      viewState
+    } = this.state;
+    const adjustedHeight = height - bottomMargin;
+    const layers = this.layers();
     return React.createElement("div", {
       style: {
         position: 'relative',
-        width: width,
+        width,
         height: adjustedHeight
       }
     }, React.createElement(DeckGL, {
@@ -154,11 +132,8 @@ var DeckGLContainer = /*#__PURE__*/function (_React$Component) {
       mapStyle: this.props.mapStyle,
       mapboxApiAccessToken: this.props.mapboxApiAccessToken
     })), children);
-  };
+  }
 
-  return DeckGLContainer;
-}(React.Component);
-
-export { DeckGLContainer as default };
+}
 DeckGLContainer.propTypes = propTypes;
 DeckGLContainer.defaultProps = defaultProps;

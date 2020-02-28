@@ -1,4 +1,4 @@
-import "core-js/modules/es.object.assign";
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -18,31 +18,32 @@ import "core-js/modules/es.object.assign";
  * specific language governing permissions and limitations
  * under the License.
  */
-var NOOP = function NOOP() {};
+const NOOP = () => {};
 
 export default function transformProps(chartProps) {
-  var width = chartProps.width,
-      height = chartProps.height,
-      rawFormData = chartProps.rawFormData,
-      queryData = chartProps.queryData,
-      hooks = chartProps.hooks;
-  var _hooks$onAddFilter = hooks.onAddFilter,
-      onAddFilter = _hooks$onAddFilter === void 0 ? NOOP : _hooks$onAddFilter,
-      _hooks$setControlValu = hooks.setControlValue,
-      setControlValue = _hooks$setControlValu === void 0 ? NOOP : _hooks$setControlValu,
-      _hooks$setTooltip = hooks.setTooltip,
-      setTooltip = _hooks$setTooltip === void 0 ? NOOP : _hooks$setTooltip;
+  const {
+    width,
+    height,
+    rawFormData,
+    queryData,
+    hooks
+  } = chartProps;
+  const {
+    onAddFilter = NOOP,
+    setControlValue = NOOP,
+    setTooltip = NOOP
+  } = hooks;
   return {
     formData: rawFormData,
-    height: height,
-    onAddFilter: onAddFilter,
+    height,
+    onAddFilter,
     payload: queryData,
-    setControlValue: setControlValue,
-    setTooltip: setTooltip,
-    viewport: Object.assign({}, rawFormData.viewport, {
-      height: height,
-      width: width
+    setControlValue,
+    setTooltip,
+    viewport: _extends({}, rawFormData.viewport, {
+      height,
+      width
     }),
-    width: width
+    width
   };
 }

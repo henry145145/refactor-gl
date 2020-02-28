@@ -1,14 +1,3 @@
-import "core-js/modules/es.array.includes";
-import "core-js/modules/es.array.join";
-import "core-js/modules/es.array.map";
-import "core-js/modules/es.object.entries";
-import "core-js/modules/es.object.keys";
-import "core-js/modules/es.regexp.exec";
-import "core-js/modules/es.string.includes";
-import "core-js/modules/es.string.split";
-
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
-
 /* eslint-disable react/jsx-sort-default-props */
 
 /* eslint-disable react/sort-prop-types */
@@ -37,98 +26,79 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { formatNumber } from '@superset-ui/number-format';
 import './Legend.css';
-var categoryDelimiter = ' - ';
-var propTypes = {
+const categoryDelimiter = ' - ';
+const propTypes = {
   categories: PropTypes.object,
   toggleCategory: PropTypes.func,
   showSingleCategory: PropTypes.func,
   format: PropTypes.string,
   position: PropTypes.oneOf([null, 'tl', 'tr', 'bl', 'br'])
 };
-var defaultProps = {
+const defaultProps = {
   categories: {},
-  toggleCategory: function toggleCategory() {},
-  showSingleCategory: function showSingleCategory() {},
+  toggleCategory: () => {},
+  showSingleCategory: () => {},
   format: null,
   position: 'tr'
 };
-
-var Legend = /*#__PURE__*/function (_React$PureComponent) {
-  _inheritsLoose(Legend, _React$PureComponent);
-
-  function Legend() {
-    return _React$PureComponent.apply(this, arguments) || this;
-  }
-
-  var _proto = Legend.prototype;
-
-  _proto.format = function format(value) {
+export default class Legend extends React.PureComponent {
+  format(value) {
     if (!this.props.format) {
       return value;
     }
 
-    var numValue = parseFloat(value);
+    const numValue = parseFloat(value);
     return formatNumber(this.props.format, numValue);
-  };
+  }
 
-  _proto.formatCategoryLabel = function formatCategoryLabel(k) {
+  formatCategoryLabel(k) {
     if (!this.props.format) {
       return k;
     }
 
     if (k.includes(categoryDelimiter)) {
-      var values = k.split(categoryDelimiter);
+      const values = k.split(categoryDelimiter);
       return this.format(values[0]) + categoryDelimiter + this.format(values[1]);
     }
 
     return this.format(k);
-  };
+  }
 
-  _proto.render = function render() {
-    var _this = this,
-        _style;
-
+  render() {
     if (Object.keys(this.props.categories).length === 0 || this.props.position === null) {
       return null;
     }
 
-    var categories = Object.entries(this.props.categories).map(function (_ref) {
-      var k = _ref[0],
-          v = _ref[1];
-      var style = {
+    const categories = Object.entries(this.props.categories).map(([k, v]) => {
+      const style = {
         color: "rgba(" + v.color.join(', ') + ")"
       };
-      var icon = v.enabled ? "\u25FC" : "\u25FB";
+      const icon = v.enabled ? '\u25FC' : '\u25FB';
       return React.createElement("li", {
         key: k
       }, React.createElement("a", {
         href: "#",
-        onClick: function onClick() {
-          return _this.props.toggleCategory(k);
-        },
-        onDoubleClick: function onDoubleClick() {
-          return _this.props.showSingleCategory(k);
-        }
+        onClick: () => this.props.toggleCategory(k),
+        onDoubleClick: () => this.props.showSingleCategory(k)
       }, React.createElement("span", {
         style: style
-      }, icon), " ", _this.formatCategoryLabel(k)));
+      }, icon), " ", this.formatCategoryLabel(k)));
     });
-    var vertical = this.props.position.charAt(0) === 't' ? 'top' : 'bottom';
-    var horizontal = this.props.position.charAt(1) === 'r' ? 'right' : 'left';
-    var style = (_style = {
-      position: 'absolute'
-    }, _style[vertical] = '0px', _style[horizontal] = '10px', _style);
+    const vertical = this.props.position.charAt(0) === 't' ? 'top' : 'bottom';
+    const horizontal = this.props.position.charAt(1) === 'r' ? 'right' : 'left';
+    const style = {
+      position: 'absolute',
+      [vertical]: '0px',
+      [horizontal]: '10px'
+    };
     return React.createElement("div", {
       className: "legend",
       style: style
     }, React.createElement("ul", {
       className: "categories"
     }, categories));
-  };
+  }
 
-  return Legend;
-}(React.PureComponent);
-
-export { Legend as default };
+}
 Legend.propTypes = propTypes;
 Legend.defaultProps = defaultProps;

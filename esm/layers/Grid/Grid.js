@@ -1,5 +1,4 @@
-import "core-js/modules/es.array.map";
-import "core-js/modules/es.object.assign";
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -40,26 +39,22 @@ function setTooltipContent(o) {
 }
 
 export function getLayer(formData, payload, onAddFilter, setTooltip) {
-  var fd = formData;
-  var c = fd.color_picker;
-  var data = payload.data.features.map(function (d) {
-    return Object.assign({}, d, {
-      color: [c.r, c.g, c.b, 255 * c.a]
-    });
-  });
+  const fd = formData;
+  const c = fd.color_picker;
+  let data = payload.data.features.map(d => _extends({}, d, {
+    color: [c.r, c.g, c.b, 255 * c.a]
+  }));
 
   if (fd.js_data_mutator) {
     // Applying user defined data mutator if defined
-    var jsFnMutator = sandboxedEval(fd.js_data_mutator);
+    const jsFnMutator = sandboxedEval(fd.js_data_mutator);
     data = jsFnMutator(data);
   }
 
-  var aggFunc = getAggFunc(fd.js_agg_function, function (p) {
-    return p.weight;
-  });
-  return new GridLayer(Object.assign({
+  const aggFunc = getAggFunc(fd.js_agg_function, p => p.weight);
+  return new GridLayer(_extends({
     id: "grid-layer-" + fd.slice_id,
-    data: data,
+    data,
     pickable: true,
     cellSize: fd.grid_size,
     minColor: [0, 0, 0, 0],
@@ -72,9 +67,7 @@ export function getLayer(formData, payload, onAddFilter, setTooltip) {
 }
 
 function getPoints(data) {
-  return data.map(function (d) {
-    return d.position;
-  });
+  return data.map(d => d.position);
 }
 
 export default createDeckGLComponent(getLayer, getPoints);

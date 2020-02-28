@@ -1,8 +1,4 @@
-import "core-js/modules/es.array.for-each";
-import "core-js/modules/es.array.map";
-import "core-js/modules/es.object.assign";
-import "core-js/modules/es.object.keys";
-import "core-js/modules/web.dom-collections.for-each";
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /* eslint-disable react/sort-prop-types */
 
@@ -35,7 +31,7 @@ import { hexToRGB } from '../../utils/colors';
 import sandboxedEval from '../../utils/sandbox';
 import { commonLayerProps } from '../common';
 import TooltipRow from '../../TooltipRow';
-var propertyMap = {
+const propertyMap = {
   fillColor: 'fillColor',
   color: 'fillColor',
   fill: 'fillColor',
@@ -45,9 +41,9 @@ var propertyMap = {
   'stroke-width': 'strokeWidth'
 };
 
-var alterProps = function alterProps(props, propOverrides) {
-  var newProps = {};
-  Object.keys(props).forEach(function (k) {
+const alterProps = (props, propOverrides) => {
+  const newProps = {};
+  Object.keys(props).forEach(k => {
     if (k in propertyMap) {
       newProps[propertyMap[k]] = props[k];
     } else {
@@ -63,20 +59,20 @@ var alterProps = function alterProps(props, propOverrides) {
     newProps.strokeColor = hexToRGB(props.strokeColor);
   }
 
-  return Object.assign({}, newProps, {}, propOverrides);
+  return _extends({}, newProps, {}, propOverrides);
 };
 
-var features;
+let features;
 
-var recurseGeoJson = function recurseGeoJson(node, propOverrides, extraProps) {
+const recurseGeoJson = (node, propOverrides, extraProps) => {
   if (node && node.features) {
-    node.features.forEach(function (obj) {
+    node.features.forEach(obj => {
       recurseGeoJson(obj, propOverrides, node.extraProps || extraProps);
     });
   }
 
   if (node && node.geometry) {
-    var newNode = Object.assign({}, node, {
+    const newNode = _extends({}, node, {
       properties: alterProps(node.properties, propOverrides)
     });
 
@@ -91,22 +87,20 @@ var recurseGeoJson = function recurseGeoJson(node, propOverrides, extraProps) {
 function setTooltipContent(o) {
   return o.object.extraProps && React.createElement("div", {
     className: "deckgl-tooltip"
-  }, Object.keys(o.object.extraProps).map(function (prop, index) {
-    return React.createElement(TooltipRow, {
-      key: "prop-" + index,
-      label: prop + ": ",
-      value: "" + o.object.extraProps[prop]
-    });
-  }));
+  }, Object.keys(o.object.extraProps).map((prop, index) => React.createElement(TooltipRow, {
+    key: "prop-" + index,
+    label: prop + ": ",
+    value: "" + o.object.extraProps[prop]
+  })));
 }
 
 export function getLayer(formData, payload, onAddFilter, setTooltip) {
-  var fd = formData;
-  var fc = fd.fill_color_picker;
-  var sc = fd.stroke_color_picker;
-  var fillColor = [fc.r, fc.g, fc.b, 255 * fc.a];
-  var strokeColor = [sc.r, sc.g, sc.b, 255 * sc.a];
-  var propOverrides = {};
+  const fd = formData;
+  const fc = fd.fill_color_picker;
+  const sc = fd.stroke_color_picker;
+  const fillColor = [fc.r, fc.g, fc.b, 255 * fc.a];
+  const strokeColor = [sc.r, sc.g, sc.b, 255 * sc.a];
+  const propOverrides = {};
 
   if (fillColor[3] > 0) {
     propOverrides.fillColor = fillColor;
@@ -118,7 +112,7 @@ export function getLayer(formData, payload, onAddFilter, setTooltip) {
 
   features = [];
   recurseGeoJson(payload.data, propOverrides);
-  var jsFnMutator;
+  let jsFnMutator;
 
   if (fd.js_data_mutator) {
     // Applying user defined data mutator if defined
@@ -126,7 +120,7 @@ export function getLayer(formData, payload, onAddFilter, setTooltip) {
     features = jsFnMutator(features);
   }
 
-  return new GeoJsonLayer(Object.assign({
+  return new GeoJsonLayer(_extends({
     id: "geojson-layer-" + fd.slice_id,
     filled: fd.filled,
     data: features,
@@ -135,7 +129,7 @@ export function getLayer(formData, payload, onAddFilter, setTooltip) {
     pointRadiusScale: fd.point_radius_scale
   }, commonLayerProps(fd, setTooltip, setTooltipContent)));
 }
-var propTypes = {
+const propTypes = {
   formData: PropTypes.object.isRequired,
   payload: PropTypes.object.isRequired,
   setControlValue: PropTypes.func.isRequired,
@@ -143,23 +137,27 @@ var propTypes = {
   onAddFilter: PropTypes.func,
   setTooltip: PropTypes.func
 };
-var defaultProps = {
-  onAddFilter: function onAddFilter() {},
-  setTooltip: function setTooltip() {}
+const defaultProps = {
+  onAddFilter() {},
+
+  setTooltip() {}
+
 };
 
 function deckGeoJson(props) {
-  var formData = props.formData,
-      payload = props.payload,
-      setControlValue = props.setControlValue,
-      onAddFilter = props.onAddFilter,
-      setTooltip = props.setTooltip,
-      viewport = props.viewport; // TODO get this to work
+  const {
+    formData,
+    payload,
+    setControlValue,
+    onAddFilter,
+    setTooltip,
+    viewport
+  } = props; // TODO get this to work
   // if (formData.autozoom) {
   //   viewport = common.fitViewport(viewport, geojsonExtent(payload.data.features));
   // }
 
-  var layer = getLayer(formData, payload, onAddFilter, setTooltip);
+  const layer = getLayer(formData, payload, onAddFilter, setTooltip);
   return React.createElement(DeckGLContainer, {
     mapboxApiAccessToken: payload.data.mapboxApiKey,
     viewport: viewport,

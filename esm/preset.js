@@ -1,5 +1,3 @@
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
-
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -28,12 +26,9 @@ import PathChartPlugin from './layers/Path';
 import PolygonChartPlugin from './layers/Polygon';
 import ScatterChartPlugin from './layers/Scatter';
 import ScreengridChartPlugin from './layers/Screengrid';
-
-var DeckGLChartPreset = /*#__PURE__*/function (_Preset) {
-  _inheritsLoose(DeckGLChartPreset, _Preset);
-
-  function DeckGLChartPreset() {
-    return _Preset.call(this, {
+export default class DeckGLChartPreset extends Preset {
+  constructor() {
+    super({
       name: 'deck.gl charts',
       plugins: [new ArcChartPlugin().configure({
         key: 'deck_arc'
@@ -54,10 +49,7 @@ var DeckGLChartPreset = /*#__PURE__*/function (_Preset) {
       }), new ScreengridChartPlugin().configure({
         key: 'deck_screengrid'
       })]
-    }) || this;
+    });
   }
 
-  return DeckGLChartPreset;
-}(Preset);
-
-export { DeckGLChartPreset as default };
+}

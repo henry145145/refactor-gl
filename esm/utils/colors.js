@@ -18,19 +18,15 @@
  */
 import { rgb } from 'd3-color'; // eslint-disable-next-line import/prefer-default-export
 
-export function hexToRGB(hex, alpha) {
-  if (alpha === void 0) {
-    alpha = 255;
-  }
-
+export function hexToRGB(hex, alpha = 255) {
   if (!hex) {
     return [0, 0, 0, alpha];
   }
 
-  var _rgb = rgb(hex),
-      r = _rgb.r,
-      g = _rgb.g,
-      b = _rgb.b;
-
+  const {
+    r,
+    g,
+    b
+  } = rgb(hex);
   return [r, g, b, alpha];
 }

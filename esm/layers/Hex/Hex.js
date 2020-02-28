@@ -1,5 +1,4 @@
-import "core-js/modules/es.array.map";
-import "core-js/modules/es.object.assign";
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -40,31 +39,26 @@ function setTooltipContent(o) {
 }
 
 export function getLayer(formData, payload, onAddFilter, setTooltip) {
-  var fd = formData;
-  var c = fd.color_picker;
-  var data = payload.data.features.map(function (d) {
-    return Object.assign({}, d, {
-      color: [c.r, c.g, c.b, 255 * c.a]
-    });
-  });
+  const fd = formData;
+  const c = fd.color_picker;
+  let data = payload.data.features.map(d => _extends({}, d, {
+    color: [c.r, c.g, c.b, 255 * c.a]
+  }));
 
   if (fd.js_data_mutator) {
     // Applying user defined data mutator if defined
-    var jsFnMutator = sandboxedEval(fd.js_data_mutator);
+    const jsFnMutator = sandboxedEval(fd.js_data_mutator);
     data = jsFnMutator(data);
   }
 
-  var aggFunc = getAggFunc(fd.js_agg_function, function (p) {
-    return p.weight;
-  });
-  return new HexagonLayer(Object.assign({
+  const aggFunc = getAggFunc(fd.js_agg_function, p => p.weight);
+  return new HexagonLayer(_extends({
     id: "hex-layer-" + fd.slice_id,
-    data: data,
+    data,
     pickable: true,
     radius: fd.grid_size,
     minColor: [0, 0, 0, 0],
     extruded: fd.extruded,
-    colorRange: [[255, 255, 183, 255 * c.a], [250, 218, 127, 255 * c.a], [245, 181, 87, 255 * c.a], [241, 146, 70, 255 * c.a], [224, 74, 40, 255 * c.a], [176, 33, 41, 255 * c.a]],
     maxColor: [c.r, c.g, c.b, 255 * c.a],
     outline: false,
     getElevationValue: aggFunc,
@@ -73,9 +67,7 @@ export function getLayer(formData, payload, onAddFilter, setTooltip) {
 }
 
 function getPoints(data) {
-  return data.map(function (d) {
-    return d.position;
-  });
+  return data.map(d => d.position);
 }
 
 export default createDeckGLComponent(getLayer, getPoints);

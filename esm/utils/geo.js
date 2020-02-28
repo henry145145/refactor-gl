@@ -17,14 +17,14 @@
  * under the License.
  */
 import { roundDecimal } from './utils';
-export var defaultViewport = {
+export const defaultViewport = {
   bearing: 0,
   latitude: 31.222656842808707,
   longitude: 6.85236157047845,
   pitch: 0,
   zoom: 1
 };
-var METER_TO_MILE = 1609.34;
+const METER_TO_MILE = 1609.34;
 export function unitToRadius(unit, num) {
   if (unit === 'square_m') {
     return Math.sqrt(num / Math.PI);
@@ -52,12 +52,12 @@ export function unitToRadius(unit, num) {
 
   return null;
 }
-export var EARTH_CIRCUMFERENCE_KM = 40075.16;
-export var MILES_PER_KM = 1.60934;
+export const EARTH_CIRCUMFERENCE_KM = 40075.16;
+export const MILES_PER_KM = 1.60934;
 export function kmToPixels(kilometers, latitude, zoomLevel) {
   // Algorithm from: https://wiki.openstreetmap.org/wiki/Zoom_levels
-  var latitudeRad = latitude * (Math.PI / 180); // Seems like the zoomLevel is off by one
+  const latitudeRad = latitude * (Math.PI / 180); // Seems like the zoomLevel is off by one
 
-  var kmPerPixel = EARTH_CIRCUMFERENCE_KM * Math.cos(latitudeRad) / Math.pow(2, zoomLevel + 9);
+  const kmPerPixel = EARTH_CIRCUMFERENCE_KM * Math.cos(latitudeRad) / 2 ** (zoomLevel + 9);
   return roundDecimal(kilometers / kmPerPixel, 2);
 }
