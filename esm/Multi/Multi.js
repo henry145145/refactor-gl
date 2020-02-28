@@ -104,6 +104,7 @@ class DeckMulti extends React.PureComponent {
 
       const subsliceCopy = _extends({}, subslice, {
         form_data: _extends({}, subslice.form_data, {
+          adhoc_filters: formData.adhoc_filters,
           filters
         })
       });
@@ -113,6 +114,7 @@ class DeckMulti extends React.PureComponent {
       }).then(({
         json
       }) => {
+        console.log(subsliceCopy.form_data);
         const layer = layerGenerators[subsliceCopy.form_data.viz_type](subsliceCopy.form_data, json, this.props.onAddFilter, this.props.setTooltip, [], this.props.onSelect);
         this.setState({
           subSlicesLayers: _extends({}, this.state.subSlicesLayers, {

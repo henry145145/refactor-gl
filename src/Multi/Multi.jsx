@@ -87,6 +87,7 @@ class DeckMulti extends React.PureComponent {
         ...subslice,
         form_data: {
           ...subslice.form_data,
+          adhoc_filters: formData.adhoc_filters,
           filters,
         },
       };
@@ -95,6 +96,7 @@ class DeckMulti extends React.PureComponent {
         endpoint: getExploreLongUrl(subsliceCopy.form_data, 'json'),
       })
         .then(({ json }) => {
+          console.log(subsliceCopy.form_data);
           const layer = layerGenerators[subsliceCopy.form_data.viz_type](
             subsliceCopy.form_data,
             json,
