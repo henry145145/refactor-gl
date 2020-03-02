@@ -90,6 +90,8 @@ class DeckMulti extends React.PureComponent {
         form_data: {
           ...subslice.form_data,
           filters,
+          adhoc_filters: formData.adhoc_filters,
+          extra_filters: filters,
         },
       };
 
@@ -121,7 +123,8 @@ class DeckMulti extends React.PureComponent {
     const { subSlicesLayers } = this.state;
 
     const layers = Object.values(subSlicesLayers);
-
+    console.log(this.state);
+    console.log(this.props);
     return (
       <DeckGLContainer
         mapboxApiAccessToken={payload.data.mapboxApiKey}
