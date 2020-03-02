@@ -2,6 +2,10 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 /* eslint-disable react/no-array-index-key */
 
+/* eslint-disable no-magic-numbers */
+
+/* eslint-disable sort-keys */
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -54,9 +58,6 @@ export function getLayer(formData, payload, onAddFilter, setTooltip) {
 
   return new PathLayer(_extends({
     id: "path-layer-" + fd.slice_id,
-    getColor: d => d.color,
-    getPath: d => d.path,
-    getWidth: d => d.width,
     data,
     rounded: true,
     widthScale: 1

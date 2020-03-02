@@ -1,16 +1,32 @@
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-/* eslint-disable react/sort-prop-types */
-
 /* eslint-disable react/require-default-props */
 
 /* eslint-disable react/no-unused-prop-types */
 
+/* eslint-disable react/forbid-prop-types */
+
 /* eslint-disable react/no-access-state-in-setstate */
+
+/* eslint-disable compat/compat */
+
+/* eslint-disable react/destructuring-assignment */
+
+/* eslint-disable react/jsx-handler-names */
+
+/* eslint-disable react/no-unsafe */
+
+/* eslint-disable react/sort-comp */
 
 /* eslint-disable camelcase */
 
 /* eslint-disable no-prototype-builtins */
+
+/* eslint-disable sort-keys */
+
+/* eslint-disable no-eq-null */
+
+/* eslint-disable no-magic-numbers */
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -83,9 +99,7 @@ const propTypes = {
   getPoints: PropTypes.func.isRequired,
   payload: PropTypes.object.isRequired,
   onAddFilter: PropTypes.func,
-  setTooltip: PropTypes.func,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  setTooltip: PropTypes.func
 };
 export default class CategoricalDeckGLContainer extends React.PureComponent {
   /*
@@ -99,6 +113,7 @@ export default class CategoricalDeckGLContainer extends React.PureComponent {
     this.state = this.getStateFromProps(props);
     this.getLayers = this.getLayers.bind(this);
     this.onValuesChange = this.onValuesChange.bind(this);
+    this.onViewportChange = this.onViewportChange.bind(this);
     this.toggleCategory = this.toggleCategory.bind(this);
     this.showSingleCategory = this.showSingleCategory.bind(this);
   }
@@ -113,8 +128,13 @@ export default class CategoricalDeckGLContainer extends React.PureComponent {
     this.setState({
       values: Array.isArray(values) ? values : [values, values + this.state.getStep(values)]
     });
-  } // eslint-disable-next-line class-methods-use-this
+  }
 
+  onViewportChange(viewport) {
+    this.setState({
+      viewport
+    });
+  }
 
   getStateFromProps(props, state) {
     const features = props.payload.data.features || [];
@@ -192,8 +212,7 @@ export default class CategoricalDeckGLContainer extends React.PureComponent {
     });
 
     return [getLayer(fd, filteredPayload, onAddFilter, setTooltip)];
-  } // eslint-disable-next-line class-methods-use-this
-
+  }
 
   addColor(data, fd) {
     const c = fd.color_picker || {
@@ -264,13 +283,13 @@ export default class CategoricalDeckGLContainer extends React.PureComponent {
       end: this.state.end,
       getStep: this.state.getStep,
       values: this.state.values,
+      onValuesChange: this.onValuesChange,
       disabled: this.state.disabled,
       viewport: this.state.viewport,
+      onViewportChange: this.onViewportChange,
       mapboxApiAccessToken: this.props.mapboxApiKey,
       mapStyle: this.props.formData.mapbox_style,
-      setControlValue: this.props.setControlValue,
-      width: this.props.width,
-      height: this.props.height
+      setControlValue: this.props.setControlValue
     }, React.createElement(Legend, {
       categories: this.state.categories,
       toggleCategory: this.toggleCategory,

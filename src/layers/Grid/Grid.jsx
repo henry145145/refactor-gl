@@ -1,3 +1,5 @@
+/* eslint-disable no-magic-numbers */
+/* eslint-disable sort-keys */
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -30,7 +32,7 @@ function setTooltipContent(o) {
     <div className="deckgl-tooltip">
       <TooltipRow
         label={`${t('Longitude and Latitude')}: `}
-        value={`${o.coordinate[0]}, ${o.coordinate[1]}`}
+        value={`${o.object.position[0]}, ${o.object.position[1]}`}
       />
       <TooltipRow label={`${t('Height')}: `} value={`${o.object.elevationValue}`} />
     </div>

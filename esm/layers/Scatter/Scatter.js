@@ -1,5 +1,9 @@
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+/* eslint-disable no-magic-numbers */
+
+/* eslint-disable sort-keys */
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -76,11 +80,9 @@ export function getLayer(formData, payload, onAddFilter, setTooltip) {
     id: "scatter-layer-" + fd.slice_id,
     data: dataWithRadius,
     fp64: true,
-    getFillColor: d => d.color,
-    getRadius: d => d.radius,
     radiusMinPixels: fd.min_radius || null,
     radiusMaxPixels: fd.max_radius || null,
-    stroked: false
+    outline: false
   }, commonLayerProps(fd, setTooltip, setTooltipContent(fd))));
 }
 export default createCategoricalDeckGLComponent(getLayer, getPoints);

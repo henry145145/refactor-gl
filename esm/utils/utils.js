@@ -1,3 +1,7 @@
+/* eslint-disable no-magic-numbers */
+
+/* eslint-disable no-restricted-properties */
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,7 +28,7 @@ export function roundDecimal(number, precision) {
 
   if (precision) {
     // eslint-disable-next-line no-param-reassign
-    roundedNumber = Math.round(number * (precision = 10 ** precision)) / precision;
+    roundedNumber = Math.round(number * (precision = Math.pow(10, precision))) / precision;
   } else {
     roundedNumber = Math.round(number);
   }

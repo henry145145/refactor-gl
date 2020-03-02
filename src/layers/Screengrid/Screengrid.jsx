@@ -1,5 +1,8 @@
-/* eslint-disable react/sort-prop-types */
 /* eslint-disable react/jsx-handler-names */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-magic-numbers */
+/* eslint-disable sort-keys */
+/* eslint-disable react/forbid-prop-types */
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -39,7 +42,7 @@ function setTooltipContent(o) {
     <div className="deckgl-tooltip">
       <TooltipRow
         label={`${t('Longitude and Latitude')}: `}
-        value={`${o.coordinate[0]}, ${o.coordinate[1]}`}
+        value={`${o.object.position[0]}, ${o.object.position[1]}`}
       />
       <TooltipRow label={`${t('Weight')}: `} value={`${o.object.weight}`} />
     </div>
@@ -60,9 +63,10 @@ export function getLayer(formData, payload, onAddFilter, setTooltip, selected, o
     data = jsFnMutator(data);
   }
 
+  // eslint-disable-next-line no-eq-null
   if (filters != null) {
     filters.forEach(f => {
-      data = data.filter(x => f(x));
+      data = data.filter(f);
     });
   }
 
@@ -88,8 +92,6 @@ const propTypes = {
   viewport: PropTypes.object.isRequired,
   onAddFilter: PropTypes.func,
   setTooltip: PropTypes.func,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
 };
 const defaultProps = {
   onAddFilter() {},
@@ -104,6 +106,7 @@ class DeckGLScreenGrid extends React.PureComponent {
 
     this.getLayers = this.getLayers.bind(this);
     this.onValuesChange = this.onValuesChange.bind(this);
+    this.onViewportChange = this.onViewportChange.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -148,6 +151,10 @@ class DeckGLScreenGrid extends React.PureComponent {
     });
   }
 
+  onViewportChange(viewport) {
+    this.setState({ viewport });
+  }
+
   getLayers(values) {
     const filters = [];
 
@@ -175,21 +182,19 @@ class DeckGLScreenGrid extends React.PureComponent {
     return (
       <div>
         <AnimatableDeckGLContainer
-          aggregation
           getLayers={this.getLayers}
           start={this.state.start}
           end={this.state.end}
           getStep={this.state.getStep}
           values={this.state.values}
+          onValuesChange={this.onValuesChange}
           disabled={this.state.disabled}
           viewport={this.state.viewport}
-          width={this.props.width}
-          height={this.props.height}
+          onViewportChange={this.onViewportChange}
           mapboxApiAccessToken={payload.data.mapboxApiKey}
           mapStyle={formData.mapbox_style}
           setControlValue={setControlValue}
-          onValuesChange={this.onValuesChange}
-          onViewportChange={this.onViewportChange}
+          aggregation
         />
       </div>
     );

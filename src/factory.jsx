@@ -1,7 +1,11 @@
-/* eslint-disable react/sort-prop-types */
 /* eslint-disable react/jsx-handler-names */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/sort-comp */
 /* eslint-disable camelcase */
+/* eslint-disable react/no-unsafe */
+/* eslint-disable sort-keys */
 /* eslint-disable react/no-unused-prop-types */
+/* eslint-disable react/forbid-prop-types */
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -35,8 +39,6 @@ const propTypes = {
   viewport: PropTypes.object.isRequired,
   onAddFilter: PropTypes.func,
   setTooltip: PropTypes.func,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
 };
 const defaultProps = {
   onAddFilter() {},
@@ -72,7 +74,6 @@ export function createDeckGLComponent(getLayer, getPoints) {
       this.setState({ viewport });
     }
 
-    // eslint-disable-next-line class-methods-use-this
     computeLayer(props) {
       const { formData, payload, onAddFilter, setTooltip } = props;
 
@@ -80,7 +81,7 @@ export function createDeckGLComponent(getLayer, getPoints) {
     }
 
     render() {
-      const { formData, payload, setControlValue, height, width } = this.props;
+      const { formData, payload, setControlValue } = this.props;
       const { layer, viewport } = this.state;
 
       return (
@@ -90,8 +91,6 @@ export function createDeckGLComponent(getLayer, getPoints) {
           layers={[layer]}
           mapStyle={formData.mapbox_style}
           setControlValue={setControlValue}
-          width={width}
-          height={height}
           onViewportChange={this.onViewportChange}
         />
       );
@@ -105,7 +104,7 @@ export function createDeckGLComponent(getLayer, getPoints) {
 
 export function createCategoricalDeckGLComponent(getLayer, getPoints) {
   function Component(props) {
-    const { formData, payload, setControlValue, setTooltip, viewport, width, height } = props;
+    const { formData, payload, setControlValue, onAddFilter, setTooltip, viewport } = props;
 
     return (
       <CategoricalDeckGLContainer
@@ -115,10 +114,9 @@ export function createCategoricalDeckGLComponent(getLayer, getPoints) {
         viewport={viewport}
         getLayer={getLayer}
         payload={payload}
+        onAddFilter={onAddFilter}
         setTooltip={setTooltip}
         getPoints={getPoints}
-        width={width}
-        height={height}
       />
     );
   }

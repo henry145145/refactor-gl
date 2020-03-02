@@ -1,5 +1,9 @@
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+/* eslint-disable no-magic-numbers */
+
+/* eslint-disable sort-keys */
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,7 +35,7 @@ function setTooltipContent(o) {
     className: "deckgl-tooltip"
   }, React.createElement(TooltipRow, {
     label: t('Longitude and Latitude') + ": ",
-    value: o.coordinate[0] + ", " + o.coordinate[1]
+    value: o.object.position[0] + ", " + o.object.position[1]
   }), React.createElement(TooltipRow, {
     label: t('Height') + ": ",
     value: "" + o.object.elevationValue

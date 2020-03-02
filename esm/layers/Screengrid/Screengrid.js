@@ -1,8 +1,14 @@
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-/* eslint-disable react/sort-prop-types */
-
 /* eslint-disable react/jsx-handler-names */
+
+/* eslint-disable react/destructuring-assignment */
+
+/* eslint-disable no-magic-numbers */
+
+/* eslint-disable sort-keys */
+
+/* eslint-disable react/forbid-prop-types */
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -43,7 +49,7 @@ function setTooltipContent(o) {
     className: "deckgl-tooltip"
   }, React.createElement(TooltipRow, {
     label: t('Longitude and Latitude') + ": ",
-    value: o.coordinate[0] + ", " + o.coordinate[1]
+    value: o.object.position[0] + ", " + o.object.position[1]
   }), React.createElement(TooltipRow, {
     label: t('Weight') + ": ",
     value: "" + o.object.weight
@@ -61,11 +67,12 @@ export function getLayer(formData, payload, onAddFilter, setTooltip, selected, o
     // Applying user defined data mutator if defined
     const jsFnMutator = sandboxedEval(fd.js_data_mutator);
     data = jsFnMutator(data);
-  }
+  } // eslint-disable-next-line no-eq-null
+
 
   if (filters != null) {
     filters.forEach(f => {
-      data = data.filter(x => f(x));
+      data = data.filter(f);
     });
   } // Passing a layer creator function instead of a layer since the
   // layer needs to be regenerated at each render
@@ -88,9 +95,7 @@ const propTypes = {
   setControlValue: PropTypes.func.isRequired,
   viewport: PropTypes.object.isRequired,
   onAddFilter: PropTypes.func,
-  setTooltip: PropTypes.func,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  setTooltip: PropTypes.func
 };
 const defaultProps = {
   onAddFilter() {},
@@ -105,6 +110,7 @@ class DeckGLScreenGrid extends React.PureComponent {
     this.state = DeckGLScreenGrid.getDerivedStateFromProps(props);
     this.getLayers = this.getLayers.bind(this);
     this.onValuesChange = this.onValuesChange.bind(this);
+    this.onViewportChange = this.onViewportChange.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -148,6 +154,12 @@ class DeckGLScreenGrid extends React.PureComponent {
     });
   }
 
+  onViewportChange(viewport) {
+    this.setState({
+      viewport
+    });
+  }
+
   getLayers(values) {
     const filters = []; // time filter
 
@@ -168,21 +180,19 @@ class DeckGLScreenGrid extends React.PureComponent {
       setControlValue
     } = this.props;
     return React.createElement("div", null, React.createElement(AnimatableDeckGLContainer, {
-      aggregation: true,
       getLayers: this.getLayers,
       start: this.state.start,
       end: this.state.end,
       getStep: this.state.getStep,
       values: this.state.values,
+      onValuesChange: this.onValuesChange,
       disabled: this.state.disabled,
       viewport: this.state.viewport,
-      width: this.props.width,
-      height: this.props.height,
+      onViewportChange: this.onViewportChange,
       mapboxApiAccessToken: payload.data.mapboxApiKey,
       mapStyle: formData.mapbox_style,
       setControlValue: setControlValue,
-      onValuesChange: this.onValuesChange,
-      onViewportChange: this.onViewportChange
+      aggregation: true
     }));
   }
 

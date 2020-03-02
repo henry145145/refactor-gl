@@ -1,6 +1,9 @@
-/* eslint-disable react/sort-prop-types */
 /* eslint-disable react/jsx-handler-names */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable no-magic-numbers */
+/* eslint-disable sort-keys */
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -38,7 +41,7 @@ import sandboxedEval from '../../utils/sandbox';
 const DOUBLE_CLICK_TRESHOLD = 250; // milliseconds
 
 function getPoints(features) {
-  return features.flatMap(d => d.polygon);
+  return features.map(d => d.polygon).flat();
 }
 
 function getElevation(d, colorScaler) {
@@ -74,9 +77,10 @@ export function getLayer(formData, payload, onAddFilter, setTooltip, selected, o
   const sc = fd.stroke_color_picker;
   let data = [...payload.data.features];
 
+  // eslint-disable-next-line no-eq-null
   if (filters != null) {
     filters.forEach(f => {
-      data = data.filter(x => f(x));
+      data = data.filter(f);
     });
   }
 
@@ -97,14 +101,14 @@ export function getLayer(formData, payload, onAddFilter, setTooltip, selected, o
   // when polygons are selected, reduce the opacity of non-selected polygons
   const colorScaler = d => {
     const baseColor = baseColorScaler(d);
-    if (selected.length > 0 && !selected.includes(d[fd.line_column])) {
+    if (selected.length > 0 && selected.indexOf(d[fd.line_column]) === -1) {
       baseColor[3] /= 2;
     }
 
     return baseColor;
   };
   const tooltipContentGenerator =
-    fd.line_column && fd.metric && ['geohash', 'zipcode'].includes(fd.line_type)
+    fd.line_column && fd.metric && ['geohash', 'zipcode'].indexOf(fd.line_type) >= 0
       ? setTooltipContent(fd)
       : undefined;
 
@@ -133,8 +137,6 @@ const propTypes = {
   viewport: PropTypes.object.isRequired,
   onAddFilter: PropTypes.func,
   setTooltip: PropTypes.func,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
 };
 
 const defaultProps = {
@@ -151,6 +153,7 @@ class DeckGLPolygon extends React.Component {
     this.getLayers = this.getLayers.bind(this);
     this.onSelect = this.onSelect.bind(this);
     this.onValuesChange = this.onValuesChange.bind(this);
+    this.onViewportChange = this.onViewportChange.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -221,6 +224,10 @@ class DeckGLPolygon extends React.Component {
     });
   }
 
+  onViewportChange(viewport) {
+    this.setState({ viewport });
+  }
+
   getLayers(values) {
     if (this.props.payload.data.features === undefined) {
       return [];
@@ -261,21 +268,19 @@ class DeckGLPolygon extends React.Component {
     return (
       <div style={{ position: 'relative' }}>
         <AnimatableDeckGLContainer
-          aggregation
           getLayers={this.getLayers}
           start={start}
           end={end}
           getStep={getStep}
           values={values}
+          onValuesChange={this.onValuesChange}
           disabled={disabled}
           viewport={viewport}
-          width={this.props.width}
-          height={this.props.height}
+          onViewportChange={this.onViewportChange}
           mapboxApiAccessToken={payload.data.mapboxApiKey}
           mapStyle={formData.mapbox_style}
           setControlValue={setControlValue}
-          onValuesChange={this.onValuesChange}
-          onViewportChange={this.onViewportChange}
+          aggregation
         >
           {formData.metric !== null && (
             <Legend

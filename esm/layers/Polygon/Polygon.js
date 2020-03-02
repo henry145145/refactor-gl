@@ -1,10 +1,16 @@
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-/* eslint-disable react/sort-prop-types */
-
 /* eslint-disable react/jsx-handler-names */
 
+/* eslint-disable react/destructuring-assignment */
+
 /* eslint-disable react/no-access-state-in-setstate */
+
+/* eslint-disable react/forbid-prop-types */
+
+/* eslint-disable no-magic-numbers */
+
+/* eslint-disable sort-keys */
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -39,7 +45,7 @@ import sandboxedEval from '../../utils/sandbox';
 const DOUBLE_CLICK_TRESHOLD = 250; // milliseconds
 
 function getPoints(features) {
-  return features.flatMap(d => d.polygon);
+  return features.map(d => d.polygon).flat();
 }
 
 function _getElevation(d, colorScaler) {
@@ -70,11 +76,11 @@ export function getLayer(formData, payload, onAddFilter, setTooltip, selected, o
   const fd = formData;
   const fc = fd.fill_color_picker;
   const sc = fd.stroke_color_picker;
-  let data = [...payload.data.features];
+  let data = [...payload.data.features]; // eslint-disable-next-line no-eq-null
 
   if (filters != null) {
     filters.forEach(f => {
-      data = data.filter(x => f(x));
+      data = data.filter(f);
     });
   }
 
@@ -94,14 +100,14 @@ export function getLayer(formData, payload, onAddFilter, setTooltip, selected, o
   const colorScaler = d => {
     const baseColor = baseColorScaler(d);
 
-    if (selected.length > 0 && !selected.includes(d[fd.line_column])) {
+    if (selected.length > 0 && selected.indexOf(d[fd.line_column]) === -1) {
       baseColor[3] /= 2;
     }
 
     return baseColor;
   };
 
-  const tooltipContentGenerator = fd.line_column && fd.metric && ['geohash', 'zipcode'].includes(fd.line_type) ? setTooltipContent(fd) : undefined;
+  const tooltipContentGenerator = fd.line_column && fd.metric && ['geohash', 'zipcode'].indexOf(fd.line_type) >= 0 ? setTooltipContent(fd) : undefined;
   return new PolygonLayer(_extends({
     id: "path-layer-" + fd.slice_id,
     data,
@@ -124,9 +130,7 @@ const propTypes = {
   setControlValue: PropTypes.func.isRequired,
   viewport: PropTypes.object.isRequired,
   onAddFilter: PropTypes.func,
-  setTooltip: PropTypes.func,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  setTooltip: PropTypes.func
 };
 const defaultProps = {
   onAddFilter() {},
@@ -142,6 +146,7 @@ class DeckGLPolygon extends React.Component {
     this.getLayers = this.getLayers.bind(this);
     this.onSelect = this.onSelect.bind(this);
     this.onValuesChange = this.onValuesChange.bind(this);
+    this.onViewportChange = this.onViewportChange.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -218,6 +223,12 @@ class DeckGLPolygon extends React.Component {
     });
   }
 
+  onViewportChange(viewport) {
+    this.setState({
+      viewport
+    });
+  }
+
   getLayers(values) {
     if (this.props.payload.data.features === undefined) {
       return [];
@@ -260,21 +271,19 @@ class DeckGLPolygon extends React.Component {
         position: 'relative'
       }
     }, React.createElement(AnimatableDeckGLContainer, {
-      aggregation: true,
       getLayers: this.getLayers,
       start: start,
       end: end,
       getStep: getStep,
       values: values,
+      onValuesChange: this.onValuesChange,
       disabled: disabled,
       viewport: viewport,
-      width: this.props.width,
-      height: this.props.height,
+      onViewportChange: this.onViewportChange,
       mapboxApiAccessToken: payload.data.mapboxApiKey,
       mapStyle: formData.mapbox_style,
       setControlValue: setControlValue,
-      onValuesChange: this.onValuesChange,
-      onViewportChange: this.onViewportChange
+      aggregation: true
     }, formData.metric !== null && React.createElement(Legend, {
       categories: buckets,
       position: formData.legend_position,

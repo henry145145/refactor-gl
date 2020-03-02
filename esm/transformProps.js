@@ -35,7 +35,6 @@ export default function transformProps(chartProps) {
   } = hooks;
   return {
     formData: rawFormData,
-    height,
     onAddFilter,
     payload: queryData,
     setControlValue,
@@ -43,7 +42,6 @@ export default function transformProps(chartProps) {
     viewport: _extends({}, rawFormData.viewport, {
       height,
       width
-    }),
-    width
+    })
   };
 }

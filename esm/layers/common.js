@@ -1,5 +1,7 @@
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+/* eslint-disable no-magic-numbers */
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -66,9 +68,9 @@ export function fitViewport(viewport, points, padding = 10) {
       padding,
       width: viewport.width
     }));
-  } catch (error) {
+  } catch (e) {
     /* eslint no-console: 0 */
-    console.error('Could not auto zoom', error);
+    console.error('Could not auto zoom', e);
     return viewport;
   }
 }
@@ -87,7 +89,7 @@ export function commonLayerProps(formData, setTooltip, setTooltipContent, onSele
         setTooltip({
           content: tooltipContentGenerator(o),
           x: o.x,
-          y: o.y
+          y: o.y + 30
         });
       } else {
         setTooltip(null);
@@ -147,5 +149,5 @@ export function getAggFunc(type = 'sum', accessor = null) {
     return arr => d3func(arr);
   }
 
-  return arr => d3func(arr.map(x => accessor(x)));
+  return arr => d3func(arr.map(accessor));
 }
