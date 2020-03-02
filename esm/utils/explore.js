@@ -12,13 +12,23 @@ export function getURIDirectory(formData, endpointType = 'base') {
   return directory;
 }
 export function getExploreLongUrl(formData, endpointType, allowOverflow = true, extraSearch = {}) {
+  console.log({
+    formData
+  });
+
   if (!formData.datasource) {
     return null;
   }
 
   const uri = new URI('/');
   const directory = getURIDirectory(formData, endpointType);
+  console.log({
+    directory
+  });
   const search = uri.search(true);
+  console.log({
+    search
+  });
   Object.keys(extraSearch).forEach(key => {
     search[key] = extraSearch[key];
   });
@@ -31,6 +41,7 @@ export function getExploreLongUrl(formData, endpointType, allowOverflow = true, 
   const url = uri.directory(directory).search(search).toString();
 
   if (!allowOverflow && url.length > MAX_URL_LENGTH) {
+    console.log('hello');
     const minimalFormData = {
       datasource: formData.datasource,
       viz_type: formData.viz_type
@@ -40,5 +51,6 @@ export function getExploreLongUrl(formData, endpointType, allowOverflow = true, 
     });
   }
 
+  console.log(url);
   return url;
 }
