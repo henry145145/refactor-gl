@@ -75,13 +75,11 @@ class DeckMulti extends React.PureComponent {
       formData,
       payload
     } = nextProps;
-    console.log(this.props.formData.deck_slices);
-    console.log(nextProps.formData.deck_slices);
-    const hasChanges = !_.isEqual(this.props.formData.deck_slices, nextProps.formData.deck_slices); // if (hasChanges) {
-    //   this.loadLayers(formData, payload);
-    // }
+    const hasChanges = !_.isEqual(this.props.formData.deck_slices, nextProps.formData.deck_slices);
 
-    this.loadLayers(formData, payload);
+    if (hasChanges) {
+      this.loadLayers(formData, payload);
+    }
   }
 
   onViewportChange(viewport) {
@@ -103,7 +101,6 @@ class DeckMulti extends React.PureComponent {
 
       const subsliceCopy = _extends({}, subslice, {
         form_data: _extends({}, subslice.form_data, {
-          adhoc_filters: formData.adhoc_filters,
           filters
         })
       });
@@ -133,7 +130,6 @@ class DeckMulti extends React.PureComponent {
       subSlicesLayers
     } = this.state;
     const layers = Object.values(subSlicesLayers);
-    console.log(layers);
     return React.createElement(DeckGLContainer, {
       mapboxApiAccessToken: payload.data.mapboxApiKey,
       viewport: this.state.viewport || this.props.viewport,

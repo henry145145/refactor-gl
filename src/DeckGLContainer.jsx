@@ -33,7 +33,6 @@ const propTypes = {
   viewport: PropTypes.object.isRequired,
   layers: PropTypes.array.isRequired,
   setControlValue: PropTypes.func,
-  onViewportChange: PropTypes.func,
   mapStyle: PropTypes.string,
   mapboxApiAccessToken: PropTypes.string.isRequired,
   children: PropTypes.node,
@@ -52,12 +51,12 @@ export default class DeckGLContainer extends React.Component {
   constructor(props) {
     super(props);
     this.tick = this.tick.bind(this);
+    this.onViewStateChange = this.onViewStateChange.bind(this);
     // This has to be placed after this.tick is bound to this
     this.state = {
       timer: setInterval(this.tick, TICK),
-      viewState: this.props.viewport,
+      viewState: props.viewport,
     };
-    this.onViewStateChange = this.onViewStateChange.bind(this);
   }
 
   componentWillUnmount() {
@@ -80,11 +79,6 @@ export default class DeckGLContainer extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { viewport } = nextProps;
-    this.setState({ viewState: viewport });
-  }
-
   layers() {
     // Support for layer factory
     if (this.props.layers.some(l => typeof l === 'function')) {
@@ -105,7 +99,7 @@ export default class DeckGLContainer extends React.Component {
       <div style={{ position: 'relative', width, height: adjustedHeight }}>
         <DeckGL
           initWebGLParameters
-          controller={true}
+          controller
           width={width}
           height={adjustedHeight}
           layers={layers}
