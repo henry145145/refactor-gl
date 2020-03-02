@@ -99,7 +99,9 @@ const propTypes = {
   getPoints: PropTypes.func.isRequired,
   payload: PropTypes.object.isRequired,
   onAddFilter: PropTypes.func,
-  setTooltip: PropTypes.func
+  setTooltip: PropTypes.func,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
 };
 export default class CategoricalDeckGLContainer extends React.PureComponent {
   /*
@@ -113,7 +115,6 @@ export default class CategoricalDeckGLContainer extends React.PureComponent {
     this.state = this.getStateFromProps(props);
     this.getLayers = this.getLayers.bind(this);
     this.onValuesChange = this.onValuesChange.bind(this);
-    this.onViewportChange = this.onViewportChange.bind(this);
     this.toggleCategory = this.toggleCategory.bind(this);
     this.showSingleCategory = this.showSingleCategory.bind(this);
   }
@@ -127,12 +128,6 @@ export default class CategoricalDeckGLContainer extends React.PureComponent {
   onValuesChange(values) {
     this.setState({
       values: Array.isArray(values) ? values : [values, values + this.state.getStep(values)]
-    });
-  }
-
-  onViewportChange(viewport) {
-    this.setState({
-      viewport
     });
   }
 
@@ -286,10 +281,11 @@ export default class CategoricalDeckGLContainer extends React.PureComponent {
       onValuesChange: this.onValuesChange,
       disabled: this.state.disabled,
       viewport: this.state.viewport,
-      onViewportChange: this.onViewportChange,
       mapboxApiAccessToken: this.props.mapboxApiKey,
       mapStyle: this.props.formData.mapbox_style,
-      setControlValue: this.props.setControlValue
+      setControlValue: this.props.setControlValue,
+      width: this.props.width,
+      height: this.props.height
     }, React.createElement(Legend, {
       categories: this.state.categories,
       toggleCategory: this.toggleCategory,

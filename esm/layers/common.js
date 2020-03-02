@@ -89,7 +89,7 @@ export function commonLayerProps(formData, setTooltip, setTooltipContent, onSele
         setTooltip({
           content: tooltipContentGenerator(o),
           x: o.x,
-          y: o.y + 30
+          y: o.y
         });
       } else {
         setTooltip(null);

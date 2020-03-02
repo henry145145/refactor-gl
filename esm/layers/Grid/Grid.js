@@ -35,7 +35,7 @@ function setTooltipContent(o) {
     className: "deckgl-tooltip"
   }, React.createElement(TooltipRow, {
     label: t('Longitude and Latitude') + ": ",
-    value: o.object.position[0] + ", " + o.object.position[1]
+    value: o.coordinate[0] + ", " + o.coordinate[1]
   }), React.createElement(TooltipRow, {
     label: t('Height') + ": ",
     value: "" + o.object.elevationValue

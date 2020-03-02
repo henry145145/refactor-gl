@@ -36,7 +36,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEqual } from 'lodash';
+import { isEqual, differenceWith } from 'lodash';
 import DeckGLContainer from './DeckGLContainer';
 import CategoricalDeckGLContainer from './CategoricalDeckGLContainer';
 import { fitViewport } from './layers/common';
@@ -46,7 +46,9 @@ const propTypes = {
   setControlValue: PropTypes.func.isRequired,
   viewport: PropTypes.object.isRequired,
   onAddFilter: PropTypes.func,
-  setTooltip: PropTypes.func
+  setTooltip: PropTypes.func,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
 };
 const defaultProps = {
   onAddFilter() {},
@@ -83,6 +85,17 @@ export function createDeckGLComponent(getLayer, getPoints) {
           layer: this.computeLayer(nextProps)
         });
       }
+
+      const [oldFilter, newFilter] = [currFdNoVP.extra_filters, nextFdNoVP.extra_filters];
+      const [diff, diff2] = [differenceWith(oldFilter, newFilter, isEqual), differenceWith(newFilter, oldFilter, isEqual)];
+
+      if (diff.length || diff2.length) {
+        const originalViewport = nextProps.viewport;
+        const viewport = nextProps.formData.autozoom ? fitViewport(originalViewport, getPoints(nextProps.payload.data.features)) : originalViewport;
+        this.setState({
+          viewport
+        });
+      }
     }
 
     onViewportChange(viewport) {
@@ -105,7 +118,9 @@ export function createDeckGLComponent(getLayer, getPoints) {
       const {
         formData,
         payload,
-        setControlValue
+        setControlValue,
+        height,
+        width
       } = this.props;
       const {
         layer,
@@ -117,7 +132,9 @@ export function createDeckGLComponent(getLayer, getPoints) {
         layers: [layer],
         mapStyle: formData.mapbox_style,
         setControlValue: setControlValue,
-        onViewportChange: this.onViewportChange
+        onViewportChange: this.onViewportChange,
+        width: width,
+        height: height
       });
     }
 
@@ -135,7 +152,9 @@ export function createCategoricalDeckGLComponent(getLayer, getPoints) {
       setControlValue,
       onAddFilter,
       setTooltip,
-      viewport
+      viewport,
+      width,
+      height
     } = props;
     return React.createElement(CategoricalDeckGLContainer, {
       formData: formData,
@@ -146,7 +165,9 @@ export function createCategoricalDeckGLComponent(getLayer, getPoints) {
       payload: payload,
       onAddFilter: onAddFilter,
       setTooltip: setTooltip,
-      getPoints: getPoints
+      getPoints: getPoints,
+      width: width,
+      height: height
     });
   }
 
