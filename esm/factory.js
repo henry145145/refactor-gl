@@ -46,9 +46,7 @@ const propTypes = {
   setControlValue: PropTypes.func.isRequired,
   viewport: PropTypes.object.isRequired,
   onAddFilter: PropTypes.func,
-  setTooltip: PropTypes.func,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  setTooltip: PropTypes.func
 };
 const defaultProps = {
   onAddFilter() {},
@@ -118,9 +116,7 @@ export function createDeckGLComponent(getLayer, getPoints) {
       const {
         formData,
         payload,
-        setControlValue,
-        height,
-        width
+        setControlValue
       } = this.props;
       const {
         layer,
@@ -132,9 +128,7 @@ export function createDeckGLComponent(getLayer, getPoints) {
         layers: [layer],
         mapStyle: formData.mapbox_style,
         setControlValue: setControlValue,
-        onViewportChange: this.onViewportChange,
-        width: width,
-        height: height
+        onViewportChange: this.onViewportChange
       });
     }
 
@@ -152,9 +146,7 @@ export function createCategoricalDeckGLComponent(getLayer, getPoints) {
       setControlValue,
       onAddFilter,
       setTooltip,
-      viewport,
-      width,
-      height
+      viewport
     } = props;
     return React.createElement(CategoricalDeckGLContainer, {
       formData: formData,
@@ -165,9 +157,7 @@ export function createCategoricalDeckGLComponent(getLayer, getPoints) {
       payload: payload,
       onAddFilter: onAddFilter,
       setTooltip: setTooltip,
-      getPoints: getPoints,
-      width: width,
-      height: height
+      getPoints: getPoints
     });
   }
 

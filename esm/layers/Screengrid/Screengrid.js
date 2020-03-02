@@ -49,7 +49,7 @@ function setTooltipContent(o) {
     className: "deckgl-tooltip"
   }, React.createElement(TooltipRow, {
     label: t('Longitude and Latitude') + ": ",
-    value: o.coordinate[0] + ", " + o.coordinate[1]
+    value: o.object.position[0] + ", " + o.object.position[1]
   }), React.createElement(TooltipRow, {
     label: t('Weight') + ": ",
     value: "" + o.object.weight
@@ -95,9 +95,7 @@ const propTypes = {
   setControlValue: PropTypes.func.isRequired,
   viewport: PropTypes.object.isRequired,
   onAddFilter: PropTypes.func,
-  setTooltip: PropTypes.func,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  setTooltip: PropTypes.func
 };
 const defaultProps = {
   onAddFilter() {},
@@ -112,6 +110,7 @@ class DeckGLScreenGrid extends React.PureComponent {
     this.state = DeckGLScreenGrid.getDerivedStateFromProps(props);
     this.getLayers = this.getLayers.bind(this);
     this.onValuesChange = this.onValuesChange.bind(this);
+    this.onViewportChange = this.onViewportChange.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -155,6 +154,12 @@ class DeckGLScreenGrid extends React.PureComponent {
     });
   }
 
+  onViewportChange(viewport) {
+    this.setState({
+      viewport
+    });
+  }
+
   getLayers(values) {
     const filters = []; // time filter
 
@@ -183,8 +188,7 @@ class DeckGLScreenGrid extends React.PureComponent {
       onValuesChange: this.onValuesChange,
       disabled: this.state.disabled,
       viewport: this.state.viewport,
-      width: this.props.width,
-      height: this.props.height,
+      onViewportChange: this.onViewportChange,
       mapboxApiAccessToken: payload.data.mapboxApiKey,
       mapStyle: formData.mapbox_style,
       setControlValue: setControlValue,

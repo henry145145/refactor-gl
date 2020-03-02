@@ -130,9 +130,7 @@ const propTypes = {
   setControlValue: PropTypes.func.isRequired,
   viewport: PropTypes.object.isRequired,
   onAddFilter: PropTypes.func,
-  setTooltip: PropTypes.func,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  setTooltip: PropTypes.func
 };
 const defaultProps = {
   onAddFilter() {},
@@ -148,6 +146,7 @@ class DeckGLPolygon extends React.Component {
     this.getLayers = this.getLayers.bind(this);
     this.onSelect = this.onSelect.bind(this);
     this.onValuesChange = this.onValuesChange.bind(this);
+    this.onViewportChange = this.onViewportChange.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -224,6 +223,12 @@ class DeckGLPolygon extends React.Component {
     });
   }
 
+  onViewportChange(viewport) {
+    this.setState({
+      viewport
+    });
+  }
+
   getLayers(values) {
     if (this.props.payload.data.features === undefined) {
       return [];
@@ -274,8 +279,7 @@ class DeckGLPolygon extends React.Component {
       onValuesChange: this.onValuesChange,
       disabled: disabled,
       viewport: viewport,
-      width: this.props.width,
-      height: this.props.height,
+      onViewportChange: this.onViewportChange,
       mapboxApiAccessToken: payload.data.mapboxApiKey,
       mapStyle: formData.mapbox_style,
       setControlValue: setControlValue,

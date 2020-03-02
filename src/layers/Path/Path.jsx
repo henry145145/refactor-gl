@@ -60,9 +60,6 @@ export function getLayer(formData, payload, onAddFilter, setTooltip) {
 
   return new PathLayer({
     id: `path-layer-${fd.slice_id}`,
-    getColor: d => d.color,
-    getPath: d => d.path,
-    getWidth: d => d.width,
     data,
     rounded: true,
     widthScale: 1,

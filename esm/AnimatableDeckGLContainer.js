@@ -1,3 +1,5 @@
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 /* eslint-disable react/jsx-handler-names */
 
 /* eslint-disable react/destructuring-assignment */
@@ -45,18 +47,30 @@ const propTypes = {
   mapStyle: PropTypes.string,
   mapboxApiAccessToken: PropTypes.string.isRequired,
   setControlValue: PropTypes.func,
-  onValuesChange: PropTypes.func,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  onViewportChange: PropTypes.func,
+  onValuesChange: PropTypes.func
 };
 const defaultProps = {
   aggregation: false,
   disabled: false,
   mapStyle: 'light',
   setControlValue: () => {},
+  onViewportChange: () => {},
   onValuesChange: () => {}
 };
-export default class AnimatableDeckGLContainer extends React.PureComponent {
+export default class AnimatableDeckGLContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onViewportChange = this.onViewportChange.bind(this);
+  }
+
+  onViewportChange(viewport) {
+    const originalViewport = this.props.disabled ? _extends({}, viewport) : _extends({}, viewport, {
+      height: viewport.height + PLAYSLIDER_HEIGHT
+    });
+    this.props.onViewportChange(originalViewport);
+  }
+
   render() {
     const {
       start,
@@ -71,20 +85,21 @@ export default class AnimatableDeckGLContainer extends React.PureComponent {
       viewport,
       setControlValue,
       mapStyle,
-      mapboxApiAccessToken,
-      height,
-      width
+      mapboxApiAccessToken
     } = this.props;
-    const layers = getLayers(values);
+    const layers = getLayers(values); // leave space for the play slider
+
+    const modifiedViewport = _extends({}, viewport, {
+      height: disabled ? viewport.height : viewport.height - PLAYSLIDER_HEIGHT
+    });
+
     return React.createElement("div", null, React.createElement(DeckGLContainer, {
-      viewport: viewport,
+      viewport: modifiedViewport,
       layers: layers,
       setControlValue: setControlValue,
       mapStyle: mapStyle,
       mapboxApiAccessToken: mapboxApiAccessToken,
-      bottomMargin: disabled ? 0 : PLAYSLIDER_HEIGHT,
-      width: width,
-      height: height
+      onViewportChange: this.onViewportChange
     }), !disabled && React.createElement(PlaySlider, {
       start: start,
       end: end,

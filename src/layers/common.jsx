@@ -61,7 +61,10 @@ export function getBounds(points) {
   const latBounds = latExt[0] === latExt[1] ? getLatBoundsForSingleCoordinate(latExt) : latExt;
   const lngBounds = lngExt[0] === lngExt[1] ? getLngBoundsForSingleCoordinate(lngExt) : lngExt;
 
-  return [[lngBounds[0], latBounds[0]], [lngBounds[1], latBounds[1]]];
+  return [
+    [lngBounds[0], latBounds[0]],
+    [lngBounds[1], latBounds[1]],
+  ];
 }
 
 export function fitViewport(viewport, points, padding = 10) {
@@ -98,7 +101,7 @@ export function commonLayerProps(formData, setTooltip, setTooltipContent, onSele
         setTooltip({
           content: tooltipContentGenerator(o),
           x: o.x,
-          y: o.y,
+          y: o.y + 30,
         });
       } else {
         setTooltip(null);

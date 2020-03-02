@@ -1,3 +1,5 @@
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 /* eslint-disable react/jsx-handler-names */
 
 /* eslint-disable react/destructuring-assignment */
@@ -26,11 +28,12 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StaticMap } from 'react-map-gl';
+import MapGL from 'react-map-gl';
 import DeckGL from 'deck.gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { isEqual } from 'lodash';
 import './css/deckgl.css';
-const TICK = 250; // milliseconds
+const TICK = 2000; // milliseconds
 
 const propTypes = {
   viewport: PropTypes.object.isRequired,
@@ -38,58 +41,65 @@ const propTypes = {
   setControlValue: PropTypes.func,
   mapStyle: PropTypes.string,
   mapboxApiAccessToken: PropTypes.string.isRequired,
-  children: PropTypes.node,
-  bottomMargin: PropTypes.number,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  onViewportChange: PropTypes.func
 };
 const defaultProps = {
   mapStyle: 'light',
-  setControlValue: () => {},
-  children: null,
-  bottomMargin: 0
+  onViewportChange: () => {},
+  setControlValue: () => {}
 };
 export default class DeckGLContainer extends React.Component {
   constructor(props) {
     super(props);
     this.tick = this.tick.bind(this);
-    this.onViewStateChange = this.onViewStateChange.bind(this); // This has to be placed after this.tick is bound to this
+    this.onViewportChange = this.onViewportChange.bind(this); // This has to be placed after this.tick is bound to this
 
     this.state = {
-      timer: setInterval(this.tick, TICK),
-      viewState: props.viewport
+      previousViewport: props.viewport,
+      timer: setInterval(this.tick, TICK)
     };
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.viewport !== prevState.viewport) {
+      return {
+        viewport: _extends({}, nextProps.viewport),
+        previousViewport: prevState.viewport
+      };
+    }
+
+    return null;
   }
 
   componentWillUnmount() {
     clearInterval(this.state.timer);
   }
 
-  onViewStateChange({
-    viewState
-  }) {
-    this.setState({
-      viewState,
-      lastUpdate: Date.now()
-    });
+  onViewportChange(viewport) {
+    const vp = Object.assign({}, viewport); // delete vp.width;
+    // delete vp.height;
+
+    const newVp = _extends({}, this.state.previousViewport, {}, vp); // this.setState(() => ({ viewport: newVp }));
+
+
+    this.props.onViewportChange(newVp);
   }
 
   tick() {
-    // Rate limiting updating viewport controls as it triggers lotsa renders
-    const {
-      lastUpdate
-    } = this.state;
-
-    if (lastUpdate && Date.now() - lastUpdate > TICK) {
+    // Limiting updating viewport controls through Redux at most 1*sec
+    // Deep compare is needed as shallow equality doesn't work here, viewport object
+    // changes id at every change
+    if (this.state && !isEqual(this.state.previousViewport, this.props.viewport)) {
       const setCV = this.props.setControlValue;
+      const vp = this.props.viewport;
 
       if (setCV) {
-        setCV('viewport', this.state.viewState);
+        setCV('viewport', vp);
       }
 
-      this.setState({
-        lastUpdate: null
-      });
+      this.setState(() => ({
+        previousViewport: this.props.viewport
+      }));
     }
   }
 
@@ -104,34 +114,16 @@ export default class DeckGLContainer extends React.Component {
 
   render() {
     const {
-      children,
-      bottomMargin,
-      height,
-      width
+      viewport
     } = this.props;
-    const {
-      viewState
-    } = this.state;
-    const adjustedHeight = height - bottomMargin;
-    const layers = this.layers();
-    return React.createElement("div", {
-      style: {
-        position: 'relative',
-        width,
-        height: adjustedHeight
-      }
-    }, React.createElement(DeckGL, {
-      width: width,
-      height: adjustedHeight,
-      layers: layers,
-      viewState: viewState,
-      onViewStateChange: this.onViewStateChange,
-      initWebGLParameters: true,
-      controller: true
-    }, React.createElement(StaticMap, {
+    return React.createElement(MapGL, _extends({}, viewport, {
       mapStyle: this.props.mapStyle,
+      onViewportChange: this.onViewportChange,
       mapboxApiAccessToken: this.props.mapboxApiAccessToken
-    })), children);
+    }), React.createElement(DeckGL, _extends({}, viewport, {
+      layers: this.layers(),
+      initWebGLParameters: true
+    })));
   }
 
 }
