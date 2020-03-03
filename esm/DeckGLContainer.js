@@ -28,8 +28,8 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import MapGL from 'react-map-gl';
-import StaticMap from 'react-map-gl';
+import MapGL from 'react-map-gl'; // import StaticMap from 'react-map-gl';
+
 import DeckGL from 'deck.gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { isEqual } from 'lodash';
@@ -120,14 +120,12 @@ export default class DeckGLContainer extends React.Component {
     return React.createElement(MapGL, _extends({}, viewport, {
       mapStyle: this.props.mapStyle,
       onViewportChange: this.onViewportChange,
+      captureDrag: false,
       mapboxApiAccessToken: this.props.mapboxApiAccessToken
     }), React.createElement(DeckGL, _extends({}, viewport, {
       layers: this.layers(),
       initWebGLParameters: true
-    })), React.createElement(StaticMap, {
-      mapStyle: this.props.mapStyle,
-      mapboxApiAccessToken: this.props.mapboxApiAccessToken
-    }));
+    })));
   }
 
 }
