@@ -23,6 +23,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MapGL from 'react-map-gl';
+import StaticMap from 'react-map-gl';
 import DeckGL from 'deck.gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { isEqual } from 'lodash';
@@ -115,6 +116,7 @@ export default class DeckGLContainer extends React.Component {
         mapboxApiAccessToken={this.props.mapboxApiAccessToken}
       >
         <DeckGL {...viewport} layers={this.layers()} initWebGLParameters />
+        <StaticMap mapStyle={this.props.mapStyle} mapboxApiAccessToken={this.props.mapboxApiAccessToken}/>
       </MapGL>
     );
   }
