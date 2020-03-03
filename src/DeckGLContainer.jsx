@@ -115,6 +115,8 @@ export default class DeckGLContainer extends React.Component {
         onViewportChange={this.onViewportChange}
         dragPan={false}
         dragRotate={false}
+        scrollZoom={false}
+        doubleClickZoom={false}
         mapboxApiAccessToken={this.props.mapboxApiAccessToken}
       >
         <DeckGL {...viewport} layers={this.layers()} initWebGLParameters />

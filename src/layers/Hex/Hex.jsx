@@ -62,6 +62,7 @@ export function getLayer(formData, payload, onAddFilter, setTooltip) {
     minColor: [0, 0, 0, 0],
     extruded: fd.extruded,
     maxColor: [c.r, c.g, c.b, 255 * c.a],
+    colorRange:[[255,255,183,255*c.a],[250,218,127,255*c.a],[245,181,87,255*c.a],[241,146,70,255*c.a],[224,74,40,255*c.a],[176,33,41,255*c.a]],
     outline: false,
     getElevationValue: aggFunc,
     getColorValue: aggFunc,

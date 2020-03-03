@@ -95,7 +95,8 @@ export function createDeckGLComponent(getLayer, getPoints) {
     render() {
       const { formData, payload, setControlValue } = this.props;
       const { layer, viewport } = this.state;
-
+      console.log(formData);
+      console.log(payload);
       return (
         <DeckGLContainer
           mapboxApiAccessToken={payload.data.mapboxApiKey}
