@@ -107,7 +107,6 @@ export default class DeckGLContainer extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const { viewport } = this.props;
     const { vizType } = this.props;
     const isPath = (vizType === 'deck_path');

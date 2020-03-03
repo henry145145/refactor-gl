@@ -115,7 +115,6 @@ export default class DeckGLContainer extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const {
       viewport
     } = this.props;
