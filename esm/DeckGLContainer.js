@@ -120,7 +120,8 @@ export default class DeckGLContainer extends React.Component {
     return React.createElement(MapGL, _extends({}, viewport, {
       mapStyle: this.props.mapStyle,
       onViewportChange: this.onViewportChange,
-      captureDrag: false,
+      dragPan: false,
+      dragRotate: false,
       mapboxApiAccessToken: this.props.mapboxApiAccessToken
     }), React.createElement(DeckGL, _extends({}, viewport, {
       layers: this.layers(),
