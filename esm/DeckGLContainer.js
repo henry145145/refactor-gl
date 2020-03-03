@@ -42,7 +42,8 @@ const propTypes = {
   setControlValue: PropTypes.func,
   mapStyle: PropTypes.string,
   mapboxApiAccessToken: PropTypes.string.isRequired,
-  onViewportChange: PropTypes.func
+  onViewportChange: PropTypes.func,
+  vizType: PropTypes.string
 };
 const defaultProps = {
   mapStyle: 'light',
@@ -114,16 +115,21 @@ export default class DeckGLContainer extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     const {
       viewport
     } = this.props;
+    const {
+      vizType
+    } = this.props;
+    const isPath = vizType === 'deck_path';
     return React.createElement(MapGL, _extends({}, viewport, {
       mapStyle: this.props.mapStyle,
       onViewportChange: this.onViewportChange,
-      dragPan: false,
-      dragRotate: false,
-      scrollZoom: false,
-      doubleClickZoom: false,
+      dragPan: !isPath,
+      dragRotate: !isPath,
+      scrollZoom: !isPath,
+      doubleClickZoom: !isPath,
       mapboxApiAccessToken: this.props.mapboxApiAccessToken
     }), React.createElement(DeckGL, _extends({}, viewport, {
       layers: this.layers(),
