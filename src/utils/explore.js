@@ -33,7 +33,6 @@ export function getExploreLongUrl(formData, endpointType, allowOverflow = true, 
     .search(search)
     .toString();
   if (!allowOverflow && url.length > MAX_URL_LENGTH) {
-    console.log('beebo');
     const minimalFormData = {
       datasource: formData.datasource,
       viz_type: formData.viz_type,
@@ -43,5 +42,6 @@ export function getExploreLongUrl(formData, endpointType, allowOverflow = true, 
       URL_IS_TOO_LONG_TO_SHARE: null,
     });
   }
+  console.log({url});
   return url;
 }
