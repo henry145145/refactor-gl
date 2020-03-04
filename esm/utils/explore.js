@@ -40,8 +40,5 @@ export function getExploreLongUrl(formData, endpointType, allowOverflow = true, 
     });
   }
 
-  console.log({
-    url
-  });
   return url;
 }

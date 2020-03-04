@@ -42,6 +42,5 @@ export function getExploreLongUrl(formData, endpointType, allowOverflow = true, 
       URL_IS_TOO_LONG_TO_SHARE: null,
     });
   }
-  console.log({url});
   return url;
 }
