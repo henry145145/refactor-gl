@@ -118,6 +118,7 @@ export function createDeckGLComponent(getLayer, getPoints) {
         payload,
         setControlValue
       } = this.props;
+      console.log(formData);
       const {
         layer,
         viewport
