@@ -118,13 +118,13 @@ export function createDeckGLComponent(getLayer, getPoints) {
         payload,
         setControlValue
       } = this.props;
-      console.log(formData);
       const {
         layer,
         viewport
       } = this.state;
       const {
-        viz_type
+        viz_type,
+        canmove
       } = formData;
       return React.createElement(DeckGLContainer, {
         mapboxApiAccessToken: payload.data.mapboxApiKey,
@@ -133,7 +133,8 @@ export function createDeckGLComponent(getLayer, getPoints) {
         mapStyle: formData.mapbox_style,
         setControlValue: setControlValue,
         onViewportChange: this.onViewportChange,
-        vizType: viz_type
+        vizType: viz_type,
+        canMove: canmove
       });
     }
 

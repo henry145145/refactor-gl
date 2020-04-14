@@ -108,17 +108,18 @@ export default class DeckGLContainer extends React.Component {
 
   render() {
     const { viewport } = this.props;
-    const { vizType } = this.props;
+    const { vizType, canMove } = this.props;
     const isPath = vizType === 'deck_path';
+    const move = !isPath ? true : !!canMove;
     return (
       <MapGL
         {...viewport}
         mapStyle={this.props.mapStyle}
         onViewportChange={this.onViewportChange}
-        dragPan={!isPath}
-        dragRotate={!isPath}
-        scrollZoom={!isPath}
-        doubleClickZoom={!isPath}
+        dragPan={move}
+        dragRotate={move}
+        scrollZoom={move}
+        doubleClickZoom={move}
         mapboxApiAccessToken={this.props.mapboxApiAccessToken}
       >
         <DeckGL {...viewport} layers={this.layers()} initWebGLParameters />
