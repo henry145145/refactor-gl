@@ -71,7 +71,7 @@ export default class Legend extends React.PureComponent {
       return null;
     }
 
-    const categories = Object.entries(this.props.categories).map(([k, v]) => {
+    const categories = Object.entries(this.props.categories).sort().map(([k, v]) => {
       const style = {
         color: "rgba(" + v.color.join(', ') + ")"
       };
